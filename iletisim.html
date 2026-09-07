@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>İletişim | Avukat Barış Hezer</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <a href="index.html" class="logo">AV. BARIŞ HEZER</a>
+            <div class="hamburger">&#9776;</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Ana Sayfa</a></li>
+                <li><a href="hakkimda.html">Hakkımda</a></li>
+                <li><a href="uzmanlik-alanlari.html">Çalışma Alanları</a></li>
+                <li><a href="makaleler.html">Makaleler</a></li>
+                <li><a href="iletisim.html" class="active">İletişim</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main class="container">
+        <div class="section-title"><h2>İletişim</h2><div class="underline"></div></div>
+        <div class="contact-wrapper">
+            <div>
+                <h3>İletişim Bilgileri</h3>
+                <p style="margin-top: 1rem; color: var(--text-muted);">Randevu ve ön bilgilendirme için aşağıdaki form üzerinden iletişime geçebilirsiniz.</p>
+            </div>
+            <form id="contactForm">
+                <div class="form-group">
+                    <label for="name">Adınız Soyadınız</label>
+                    <input type="text" id="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">E-posta Adresiniz</label>
+                    <input type="email" id="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="message">Mesajınız</label>
+                    <textarea id="message" rows="5" required></textarea>
+                </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="kvkkCheck" required>
+                    <label for="kvkkCheck"><a href="kvkk.html" target="_blank">KVKK Aydınlatma Metni</a>'ni okudum ve kabul ediyorum.</label>
+                </div>
+                <button type="submit" class="btn">Gönder</button>
+            </form>
+        </div>
+    </main>
+    <footer><p>&copy; 2026 Av. Barış Hezer. | <a href="kvkk.html">KVKK Aydınlatma Metni</a></p></footer>
+    <script src="assets/js/main.js"></script>
+</body>
+</html>

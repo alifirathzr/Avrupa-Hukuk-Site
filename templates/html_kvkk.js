@@ -1,0 +1,58 @@
+module.exports = `<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KVKK Aydınlatma Metni | Avukat Barış Hezer</title>
+    <meta name="description" content="Kişisel Verilerin Korunması Kanunu (KVKK) uyarınca, Avukat Barış Hezer Hukuk Ofisi veri işleme süreçleri ve haklarınız hakkında aydınlatma metni.">
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://barishezer.av.tr/kvkk.html">
+    <meta property="og:title" content="KVKK Aydınlatma Metni | Avukat Barış Hezer">
+    <meta property="og:description" content="Veri sorumlusu sıfatıyla kişisel verilerinizin hangi amaçlarla işlendiği ve haklarınızın detayları.">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="icon" type="image/png" href="https://img.icons8.com/ios-filled/50/c5a059/scale.png">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <div class="nav-overlay"></div>
+    <header>
+        <nav class="navbar">
+            <a href="index.html" class="logo"><i class="fa-solid fa-scale-balanced"></i> AV. BARIŞ HEZER</a>
+            <div class="hamburger"><i class="fa-solid fa-bars"></i></div>
+            <ul class="nav-links">
+                <li><a href="index.html"><i class="fa-solid fa-house"></i> Ana Sayfa</a></li>
+                <li><a href="hakkimda.html"><i class="fa-solid fa-user-tie"></i> Hakkımda</a></li>
+                <li><a href="uzmanlik-alanlari.html"><i class="fa-solid fa-gavel"></i> Çalışma Alanları</a></li>
+                <li><a href="makaleler.html"><i class="fa-solid fa-book-open"></i> Makaleler</a></li>
+                <li><a href="iletisim.html"><i class="fa-solid fa-envelope"></i> İletişim</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main class="container">
+        <div class="section-title">
+            <h2>KVKK Aydınlatma Metni</h2>
+            <div class="underline"></div>
+        </div>
+        <div style="background: var(--white); padding: 3rem; border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); border-top: 4px solid var(--accent); line-height: 1.8;">
+            <p style="margin-bottom: 1.5rem; font-weight: 500; font-size: 1.1rem; color: var(--primary);">Kişisel Verilerin Korunması Kanunu ("KVKK") Uyarınca Bilgilendirme</p>
+            <p style="margin-bottom: 1.5rem;">6698 sayılı Kişisel Verilerin Korunması Kanunu ("KVKK") uyarınca, Avukat Barış Hezer veri sorumlusu sıfatıyla, tarafımıza iletilen veya ofisimizce edinilen kişisel verilerinizi, mesleki sır saklama yükümlülüğü ve kanun sınırları dahilinde işlemektedir.</p>
+            
+            <h4 style="color: var(--primary); margin: 1.5rem 0 0.75rem 0; font-size: 1.15rem;">1. Veri İşleme Amacı</h4>
+            <p style="margin-bottom: 1.5rem;">Toplanan kişisel verileriniz (isim, e-posta adresi, telefon numarası ve mesaj içeriğiniz); yalnızca tarafımızdan talep ettiğiniz hukuki danışmanlık hizmetlerinin planlanması, randevu oluşturulması ve sizinle gerekli iletişimin sağlanması amacıyla sınırlı olarak işlenmektedir.</p>
+            
+            <h4 style="color: var(--primary); margin: 1.5rem 0 0.75rem 0; font-size: 1.15rem;">2. Verilerin Aktarılması</h4>
+            <p style="margin-bottom: 1.5rem;">Kişisel verileriniz, 1136 sayılı Avukatlık Kanunu'nun avukatlık sırrına ve gizliliğe ilişkin katı hükümleri çerçevesinde korunmakta olup, yasal yükümlülükler haricinde hiçbir üçüncü taraf, kurum veya kuruluşa kesinlikle aktarılmamaktadır.</p>
+            
+            <h4 style="color: var(--primary); margin: 1.5rem 0 0.75rem 0; font-size: 1.15rem;">3. Haklarınız</h4>
+            <p style="margin-bottom: 1.5rem;">KVKK Madde 11 uyarınca, ofisimize başvurarak; kişisel verilerinizin işlenip işlenmediğini öğrenme, işlenmişse bilgi talep etme, eksik veya yanlış işlenmişse düzeltilmesini isteme ve verilerinizin silinmesini talep etme haklarına sahipsiniz.</p>
+            
+            <p>Başvurularınızı ıslak imzalı bir dilekçe ile ofis adresimize şahsen ulaştırabilir ya da e-posta adresimiz üzerinden bizimle iletişime geçebilirsiniz.</p>
+        </div>
+    </main>
+    <footer>
+        <p>&copy; 2026 Av. Barış Hezer. | <a href="kvkk.html" class="active"><i class="fa-solid fa-shield-halved"></i> KVKK Aydınlatma Metni</a></p>
+    </footer>
+    <script src="assets/js/main.js"></script>
+</body>
+</html>`;

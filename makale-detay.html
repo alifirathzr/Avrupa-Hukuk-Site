@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Makale Detayı | Avukat Barış Hezer</title>
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Makale Detayı | Avukat Barış Hezer">
+    <meta property="og:description" content="Detaylı hukuki incelemeler ve yasal haklarınıza dair uzman yazısı.">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="icon" type="image/png" href="https://img.icons8.com/ios-filled/50/c5a059/scale.png">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <div class="nav-overlay"></div>
+    <header>
+        <nav class="navbar">
+            <a href="index.html" class="logo"><i class="fa-solid fa-scale-balanced"></i> AV. BARIŞ HEZER</a>
+            <div class="hamburger"><i class="fa-solid fa-bars"></i></div>
+            <ul class="nav-links">
+                <li><a href="index.html"><i class="fa-solid fa-house"></i> Ana Sayfa</a></li>
+                <li><a href="hakkimda.html"><i class="fa-solid fa-user-tie"></i> Hakkımda</a></li>
+                <li><a href="uzmanlik-alanlari.html"><i class="fa-solid fa-gavel"></i> Çalışma Alanları</a></li>
+                <li><a href="makaleler.html" class="active"><i class="fa-solid fa-book-open"></i> Makaleler</a></li>
+                <li><a href="iletisim.html"><i class="fa-solid fa-envelope"></i> İletişim</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main class="container">
+        <div style="max-width: 850px; margin: 0 auto; background: var(--white); padding: 3rem; border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); border-top: 4px solid var(--accent);">
+            <a href="makaleler.html" class="card-link" style="margin-bottom: 2rem; display: inline-flex;"><i class="fa-solid fa-arrow-left"></i> Tüm Makalelere Dön</a>
+            <article id="articleContent">
+                <div style="display: flex; gap: 1rem; align-items: center; color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">
+                    <span><i class="fa-solid fa-calendar-days"></i> 10 Mart 2026</span>
+                    <span>&bull;</span>
+                    <span><i class="fa-solid fa-user"></i> Av. Barış Hezer</span>
+                </div>
+                <h1 style="color: var(--primary); margin-bottom: 1.5rem; font-size: 2.2rem;" id="detayTitle">Hukuki Makale Detayı</h1>
+                <div class="underline" style="margin: 0 0 2rem 0; height: 3px; width: 80px; background-color: var(--accent);"></div>
+                <div id="detayText" style="font-size: 1.05rem; line-height: 1.8;">
+                    <p>Yükleniyor...</p>
+                </div>
+            </article>
+        </div>
+    </main>
+    <footer>
+        <p>&copy; 2026 Av. Barış Hezer. | <a href="kvkk.html"><i class="fa-solid fa-shield-halved"></i> KVKK</a></p>
+    </footer>
+    <script src="assets/js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            const id = params.get('id');
+            const titleEl = document.getElementById('detayTitle');
+            const textEl = document.getElementById('detayText');
+            const db = {
+                'kira-tespit': {
+                    title: 'Kira Tespit Davaları Esasları',
+                    text: `<p>Kira bedellerinin fahiş artması veya enflasyon karşısında değer kaybetmesi durumunda, taraflara kira tespit davası açma hakkı tanınmıştır.</p>
+                    <p>TBK Madde 344 uyarınca, sözleşmenin kurulmasından itibaren 5 yıl geçmişse, yeni kira bedeli TÜFE oranları, emsal bedeller ve hakkaniyet oranları göz önünde bulundurularak belirlenir.</p>
+                    <p>Mahkeme bilirkişi yardımıyla bölgedeki emsal kiralık taşınmazları inceler ve hakkaniyet indirimi uygulayarak nihai bedeli belirler.</p>`
+                },
+                'icra-itiraz': {
+                    title: 'İlamsız İcra Takibine İtiraz ve Yolları',
+                    text: `<p>Elinizde mahkeme kararı olmadan başlatılan takiplere ilamsız icra takibi denir. Bu takiplere karşı yasal hakların kullanımı sıkı sürelere bağlıdır.</p>
+                    <p>İİK çerçevesinde borçlu, ödeme emri tebliğ alındıktan sonra 7 gün içinde ilgili icra dairesine itiraz etmek zorundadır. Borca veya dairenin yetkisine yönelik yapılan bu itiraz ile takip durdurulur.</p>`
+                },
+                'hakli-fesih': {
+                    title: 'İş Sözleşmesinin Haklı Nedenle Feshi',
+                    text: `<p>4857 Sayılı İş Kanunu uyarınca hem işçiye hem de işverene sözleşmeyi süresinden önce derhal feshetme hakkı tanınmıştır.</p>
+                    <p>İşçi, sigorta primlerinin eksik yatırılması, maaş ödenmemesi veya ahlaka aykırılık gerekçesiyle haklı fesih yapıp kıdem tazminatını alabilir.</p>
+                    <p>Fesih hakkının durumun öğrenilmesinden itibaren 6 iş günü içinde kullanılması zorunludur.</p>`
+                }
+            };
+            if (id && db[id]) {
+                titleEl.textContent = db[id].title;
+                textEl.innerHTML = db[id].text;
+                document.title = db[id].title + " | Avukat Barış Hezer";
+            }
+        });
+    </script>
+</body>
+</html>
