@@ -17,7 +17,7 @@ module.exports = `<!DOCTYPE html>
     <link rel="icon" type="image/png" href="https://img.icons8.com/ios-filled/50/c5a059/scale.png">
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
-<body>
+<body style="background-color: white;" class="makaleler-page">
     <div class="nav-overlay"></div>
     <header>
         <nav class="navbar">
@@ -69,12 +69,12 @@ module.exports = `<!DOCTYPE html>
                     }
                     grid.innerHTML = data.map(art => {
                         return \`
-                        <div class="card article-card">
+                        <a href="makale-detay.html?id=\${art.id}" class="card article-card" style="text-decoration: none; cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;">
                             <div class="card-icon"><i class="fa-solid fa-book-open"></i></div>
                             <h3 class="article-title">\${art.title}</h3>
                             <p class="article-desc">\${art.summary || ''}</p>
-                            <a href="makale-detay.html?id=\${art.id}" class="card-link">Makaleyi Oku <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
-                        </div>
+                            <span class="read-more">Makaleyi Oku <i class="fa-solid fa-arrow-right"></i></span>
+                        </a>
                         \`;
                     }).join('');
                 }

@@ -175,12 +175,74 @@ footer a:hover { color: var(--accent-hover); }
 
 .highlight-gold { color: #b8860b !important; font-weight: 700 !important; }
 
-.motto-text {
-    color: #d4af37;
-    font-size: 1.3rem;
-    font-weight: 600;
-    font-style: italic;
-    margin-bottom: 2rem;
-    border-left: 4px solid #b8860b;
-    padding-left: 1rem;
+/* Makaleler Sayfası Genişlik Ayarı */
+.makaleler-container, 
+body.makaleler-page .container,
+main.container {
+    max-width: 1280px !important; /* Sayfayı yanlara doğru ferahlat */
+    width: 90% !important;
+    margin: 0 auto !important;
+}
+
+/* Grid Aralığı ve Kart Boyutlandırması */
+.articles-grid, 
+.grid-3 {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 2rem !important; /* Kartların arasını aç */
+}
+
+/* Kartların Yanlara Doğru Genişlemesini Engelle */
+.article-card, 
+.card, 
+.article-card:hover, 
+.card:hover {
+    transform: translateY(-4px) !important; /* Sadece çok hafif yukarı kayma kalsın, yanlara asla büyütme */
+    transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+    width: 100% !important; /* Sabit genişlik */
+}
+
+/* Buton Hover Efektini İptal Et */
+.read-more, 
+.read-more:hover, 
+.card-link:hover {
+    transform: none !important;
+    width: auto !important;
+}
+
+/* Makaleler Sayfası Beyaz Arka Plan Tema Ayarları (Kartlar Orijinal Koyu Kalacak) */
+body.makaleler-page {
+    background-color: #ffffff !important;
+    color: #0d1b2a !important;
+}
+body.makaleler-page .section-title h2 {
+    color: #0d1b2a !important;
+}
+body.makaleler-page .search-container input {
+    background: #1b263b !important;
+    color: #f8f9fa !important;
+    border-color: rgba(197, 160, 89, 0.4) !important;
+}
+body.makaleler-page .search-container input::placeholder {
+    color: #a0aec0 !important;
+}
+body.makaleler-page .search-container i {
+    color: var(--accent) !important;
+}
+body.makaleler-page .card {
+    background: var(--card-dark) !important;
+    color: var(--text-light) !important;
+    border: 1px solid rgba(197, 160, 89, 0.2) !important;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.15) !important;
+}
+body.makaleler-page .card .article-title,
+body.makaleler-page .card h3 {
+    color: var(--text-light) !important;
+}
+body.makaleler-page .card .article-desc,
+body.makaleler-page .card p {
+    color: var(--text-muted) !important;
+}
+body.makaleler-page .card .read-more {
+    color: var(--accent) !important;
 }
