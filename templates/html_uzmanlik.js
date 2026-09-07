@@ -5,12 +5,12 @@ module.exports = `<!DOCTYPE html>
 <head>
 ${headCommon('Çalışma Alanları', 'Avukat Barış Hezer - Avrupa Hukuk Bürosu; Ceza, İcra, Aile, Tazminat, Gayrimenkul, Sözleşmeler, İş ve İdare Hukuku alanlarında uzman çözümler sunar.')}
 </head>
-<body class="uzmanlik-body">
+<body style="background-color: white;">
 ${headerCommon('uzmanlik')}
 
     <main class="container">
         <div class="section-title">
-            <h2>Çalışma Alanları</h2>
+            <h2 style="color: #0d1b2a;">Çalışma Alanları</h2>
             <div class="underline"></div>
         </div>
         <div class="grid-3">

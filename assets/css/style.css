@@ -150,20 +150,6 @@ footer a:hover { color: var(--accent-hover); }
     color: #000000 !important;
     text-align: center;
     margin-bottom: 2rem;
-
-/* UZMANLIK SAYFASI ÖZEL TASARIM */
-.uzmanlik-body {
-    background-color: #ffffff !important;
-    color: #000000 !important;
-}
-.uzmanlik-body h1, .uzmanlik-body h2, .uzmanlik-body h3, .uzmanlik-body .card h3 {
-    color: #000000 !important;
-}
-.uzmanlik-body .card {
-    background: #f9f9f9 !important;
-    border: 1px solid #e0e0e0 !important;
-}
-
 }
 
 .hakkimda-main-container {
@@ -198,4 +184,3 @@ footer a:hover { color: var(--accent-hover); }
     border-left: 4px solid #b8860b;
     padding-left: 1rem;
 }
-
