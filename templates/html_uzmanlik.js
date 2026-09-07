@@ -5,7 +5,7 @@ module.exports = `<!DOCTYPE html>
 <head>
 ${headCommon('Çalışma Alanları', 'Avukat Barış Hezer - Avrupa Hukuk Bürosu; Ceza, İcra, Aile, Tazminat, Gayrimenkul, Sözleşmeler, İş ve İdare Hukuku alanlarında uzman çözümler sunar.')}
 </head>
-<body>
+<body class="uzmanlik-body">
 ${headerCommon('uzmanlik')}
 
     <main class="container">

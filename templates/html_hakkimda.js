@@ -13,11 +13,11 @@ ${headerCommon('hakkimda')}
             <h2>Hakkımda</h2>
             <div class="underline"></div>
         </div>
-        <div style="max-width: 850px; margin: 0 auto; background: var(--white); padding: 3rem; border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); margin-bottom: 5rem; border-top: 4px solid var(--accent);">
-            <p style="margin-bottom: 1.5rem; font-size: 1.1rem; color: var(--primary); font-weight: 500;"><i class="fa-solid fa-quote-left" style="color: var(--accent); margin-right: 0.5rem; font-size: 1.5rem;"></i> Hukukun evrensel ilkelerine bağlı, şeffaf ve güvenilir savunma yaklaşımı.</p>
-            <p style="margin-bottom: 1.5rem;">Av. Barış Hezer, Avrupa Hukuk Bürosu bünyesinde meslek hayatı boyunca hukukun üstünlüğü ve hak arama özgürlüğü prensiplerini rehber edinmiştir. Müvekkillerinin hukuki problemlerine rasyonel, hızlı ve sonuç odaklı çözümler sunmayı hedeflemektedir.</p>
-            <p style="margin-bottom: 1.5rem;">TBB'nin belirlediği meslek kurallarına ve etik standartlara bağlı kalarak; gizlilik, dürüstlük ve şeffaflık ilkelerinden ödün vermeden hukuki danışmanlık ve savunmanlık faaliyetlerini sürdürmektedir.</p>
-            <p>Hukuki uyuşmazlıkların henüz dava aşamasına gelmeden önlenmesini amaçlayan "Koruyucu Hukuk" anlayışını benimseyen ofisimiz, müvekkillerine uzun vadeli ve güvenli bir hukuki güvence sunar.</p>
+        <div style="max-width: 850px; margin: 0 auto; background: var(--card-dark); padding: 3rem; border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); margin-bottom: 5rem; border-top: 4px solid var(--accent);">
+            <p style="margin-bottom: 1.5rem; font-size: 1.1rem; color: var(--text-light); font-weight: 500;"><i class="fa-solid fa-quote-left" style="color: var(--accent); margin-right: 0.5rem; font-size: 1.5rem;"></i> Hukukun evrensel ilkelerine bağlı, şeffaf ve güvenilir savunma yaklaşımı.</p>
+            <p style="margin-bottom: 1.5rem; color: var(--text-light);">Av. Barış Hezer, Avrupa Hukuk Bürosu bünyesinde meslek hayatı boyunca hukukun üstünlüğü ve hak arama özgürlüğü prensiplerini rehber edinmiştir. Müvekkillerinin hukuki problemlerine rasyonel, hızlı ve sonuç odaklı çözümler sunmayı hedeflemektedir.</p>
+            <p style="margin-bottom: 1.5rem; color: var(--text-light);">TBB'nin belirlediği meslek kurallarına ve etik standartlara bağlı kalarak; gizlilik, dürüstlük ve şeffaflık ilkelerinden ödün vermeden hukuki danışmanlık ve savunmanlık faaliyetlerini sürdürmektedir.</p>
+            <p style="color: var(--text-light);">Hukuki uyuşmazlıkların henüz dava aşamasına gelmeden önlenmesini amaçlayan "Koruyucu Hukuk" anlayışını benimseyen ofisimiz, müvekkillerine uzun vadeli ve güvenli bir hukuki güvence sunar.</p>
         </div>
 
         <div class="section-title" style="margin-top: 5rem;">

@@ -144,3 +144,58 @@ footer a:hover { color: var(--accent-hover); }
     .hero-title { font-size: 2.2rem; }
 }
 
+
+/* HAKKIMDA SAYFASI ÖZEL TASARIM */
+.hakkimda-title {
+    color: #000000 !important;
+    text-align: center;
+    margin-bottom: 2rem;
+
+/* UZMANLIK SAYFASI ÖZEL TASARIM */
+.uzmanlik-body {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+}
+.uzmanlik-body h1, .uzmanlik-body h2, .uzmanlik-body h3, .uzmanlik-body .card h3 {
+    color: #000000 !important;
+}
+.uzmanlik-body .card {
+    background: #f9f9f9 !important;
+    border: 1px solid #e0e0e0 !important;
+}
+
+}
+
+.hakkimda-main-container {
+    background-color: #0f172a;
+    border: 1px solid #b8860b;
+    padding: 3rem;
+    border-radius: 12px;
+    max-width: 850px;
+    margin: 0 auto 5rem auto;
+}
+
+.hakkimda-text {
+    color: #ffffff;
+    margin-bottom: 1.5rem;
+    line-height: 1.8;
+}
+
+.hakkimda-text strong {
+    color: #d4af37;
+}
+
+.bio-text { color: #ffffff !important; line-height: 1.8 !important; font-size: 1.05rem !important; margin-bottom: 1.2rem !important; }
+
+.highlight-gold { color: #b8860b !important; font-weight: 700 !important; }
+
+.motto-text {
+    color: #d4af37;
+    font-size: 1.3rem;
+    font-weight: 600;
+    font-style: italic;
+    margin-bottom: 2rem;
+    border-left: 4px solid #b8860b;
+    padding-left: 1rem;
+}
+
