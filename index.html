@@ -1,44 +1,113 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Avukat Barış Hezer | Hukuki Danışmanlık</title>
+    <title>Avukat Barış Hezer | Av. Barış Hezer - Avrupa Hukuk Bürosu</title>
+    <meta name="description" content="Avukat Barış Hezer - Avrupa Hukuk Bürosu; Ceza, İcra, Tazminat, İş, İdare ve Sözleşmeler Hukuku alanlarında modern, etik ve güvenilir danışmanlık hizmetleri sunmaktadır.">
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Avukat Barış Hezer | Av. Barış Hezer - Avrupa Hukuk Bürosu">
+    <meta property="og:description" content="Avukat Barış Hezer - Avrupa Hukuk Bürosu; Ceza, İcra, Tazminat, İş, İdare ve Sözleşmeler Hukuku alanlarında modern, etik ve güvenilir danışmanlık hizmetleri sunmaktadır.">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=1200&q=80">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="https://img.icons8.com/ios-filled/50/c5a059/scale.png">
     <link rel="stylesheet" href="assets/css/style.css">
+
 </head>
 <body>
+
+    <div class="nav-overlay"></div>
     <header>
         <nav class="navbar">
-            <a href="index.html" class="logo">AV. BARIŞ HEZER</a>
-            <div class="hamburger">&#9776;</div>
+            <a href="index.html" class="logo">
+                <div class="logo-icon-wrapper"><i class="fa-solid fa-scale-balanced"></i></div>
+                <div class="logo-text">
+                    <span class="lawyer-name">AV. BARIŞ HEZER</span>
+                    <span class="office-name">Avrupa Hukuk Bürosu</span>
+                </div>
+            </a>
+            <div class="hamburger"><i class="fa-solid fa-bars"></i></div>
             <ul class="nav-links">
-                <li><a href="index.html" class="active">Ana Sayfa</a></li>
-                <li><a href="hakkimda.html">Hakkımda</a></li>
-                <li><a href="uzmanlik-alanlari.html">Çalışma Alanları</a></li>
-                <li><a href="makaleler.html">Makaleler</a></li>
-                <li><a href="iletisim.html">İletişim</a></li>
+                <li><a href="index.html" class="active"><i class="fa-solid fa-house"></i> Ana Sayfa</a></li>
+                <li><a href="hakkimda.html" class=""><i class="fa-solid fa-user-tie"></i> Hakkımda</a></li>
+                <li><a href="uzmanlik-alanlari.html" class=""><i class="fa-solid fa-gavel"></i> Çalışma Alanları</a></li>
+                <li><a href="makaleler.html" class=""><i class="fa-solid fa-book-open"></i> Makaleler</a></li>
+                <li><a href="iletisim.html" class=""><i class="fa-solid fa-envelope"></i> İletişim</a></li>
+                <li><a href="admin.html" class="" style="color: var(--accent);"><i class="fa-solid fa-gear"></i> Panel</a></li>
             </ul>
         </nav>
     </header>
+
+
     <section class="hero">
         <div class="hero-content">
-            <h1>Avukat Barış Hezer <span>Hukuki Danışmanlık</span></h1>
-            <p>Türkiye Barolar Birliği meslek kurallarına uygun, objektif ve güvenilir hukuki hizmetler.</p>
-            <a href="iletisim.html" class="btn">İletişime Geçin</a>
+            <h1 class="hero-title">
+                Avukat Barış Hezer
+                <span class="hero-subtitle">AVRUPA HUKUK BÜROSU</span>
+            </h1>
+            <p class="hero-description">
+                Türkiye Barolar Birliği meslek kurallarına uygun, objektif, şeffaf ve güvenilir hukuki hizmetler.
+            </p>
+            <a href="iletisim.html" class="btn-hero">
+                <i class="fa-solid fa-paper-plane"></i> İletişime Geçin
+            </a>
         </div>
     </section>
+
     <main class="container">
         <div class="section-title">
-            <h2>Çalışma Alanları</h2>
+            <h2>Öne Çıkan Çalışma Alanları</h2>
             <div class="underline"></div>
         </div>
         <div class="grid-3">
-            <div class="card"><h3>Ceza Hukuku</h3><p>Ceza muhakemesi sürecinde yasal hakların korunması ve takibi.</p></div>
-            <div class="card"><h3>İcra ve İflas Hukuku</h3><p>Alacak tahsili ve icra hukuku süreçlerinin yürütülmesi.</p></div>
-            <div class="card"><h3>Gayrimenkul Hukuku</h3><p>Tapu, mülkiyet ve kira uyuşmazlıkları danışmanlığı.</p></div>
+            <div class="card">
+                <div class="card-icon"><i class="fa-solid fa-gavel"></i></div>
+                <h3>Ceza Hukuku</h3>
+                <p>Soruşturma ve kovuşturma süreçlerinde anayasal hakların ve savunmanın etkin şekilde korunması, ceza davalarının takibi.</p>
+                <a href="uzmanlik-alanlari.html" class="card-link">Detaylı Bilgi <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+            <div class="card">
+                <div class="card-icon"><i class="fa-solid fa-building-columns"></i></div>
+                <h3>İcra ve İflas Hukuku</h3>
+                <p>Alacak tahsili, icra takipleri, borç yapılandırma ve iflas süreçlerinin yasal zemin çerçevesinde hızlıca yönetilmesi.</p>
+                <a href="uzmanlik-alanlari.html" class="card-link">Detaylı Bilgi <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+            <div class="card">
+                <div class="card-icon"><i class="fa-solid fa-hand-holding-dollar"></i></div>
+                <h3>Tazminat Hukuku</h3>
+                <p>Trafik kazaları, iş kazaları, tıbbi malpraktis ve haksız fiillerden doğan maddi ve manevi tazminat davalarının takibi ve tazminat hesaplamaları.</p>
+                <a href="uzmanlik-alanlari.html" class="card-link">Detaylı Bilgi <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
         </div>
     </main>
-    <footer><p>&copy; 2026 Av. Barış Hezer. | <a href="kvkk.html">KVKK Aydınlatma Metni</a></p></footer>
+
+
+    <!-- WhatsApp Floating Butonu (Sol Alt / Bottom-Left) -->
+    <a href="https://wa.me/905000000000" class="whatsapp-float" target="_blank" rel="noopener noreferrer" title="WhatsApp İletişim Hattı" aria-label="WhatsApp İletişim Hattı">
+        <i class="fa-brands fa-whatsapp"></i>
+        <span class="whatsapp-tooltip">WhatsApp Danışma Hattı</span>
+    </a>
+
+    <!-- Sabit Alt Menü (Bottom Navigation - Mobil) -->
+    <nav class="bottom-nav">
+        <ul class="bottom-nav-items">
+            <li><a href="index.html" class="bottom-nav-link active"><i class="fa-solid fa-house"></i><span>Ana Sayfa</span></a></li>
+            <li><a href="hakkimda.html" class="bottom-nav-link "><i class="fa-solid fa-user-tie"></i><span>Hakkımda</span></a></li>
+            <li><a href="uzmanlik-alanlari.html" class="bottom-nav-link "><i class="fa-solid fa-gavel"></i><span>Alanlar</span></a></li>
+            <li><a href="makaleler.html" class="bottom-nav-link "><i class="fa-solid fa-book-open"></i><span>Makaleler</span></a></li>
+            <li><a href="iletisim.html" class="bottom-nav-link "><i class="fa-solid fa-envelope"></i><span>İletişim</span></a></li>
+        </ul>
+    </nav>
+
+
+    <footer>
+        <p>&copy; 2026 Av. Barış Hezer - Avrupa Hukuk Bürosu. Bütün hakları saklıdır. | <a href="mailto:barishezer@gmail.com"><i class="fa-solid fa-envelope"></i> barishezer@gmail.com</a> | <a href="kvkk.html"><i class="fa-solid fa-shield-halved"></i> KVKK Aydınlatma Metni</a></p>
+    </footer>
+
     <script src="assets/js/main.js"></script>
 </body>
 </html>

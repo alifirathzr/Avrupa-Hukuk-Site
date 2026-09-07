@@ -3,37 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Makaleler | Avukat Barış Hezer</title>
+    <title>Hukuki Makaleler | Avukat Barış Hezer</title>
+    <meta name="description" content="Avukat Barış Hezer'in güncel yasal düzenlemeler, yargıtay kararları ve hukuki analizler içeren bilgilendirici makalelerini okuyun.">
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://barishezer.av.tr/makaleler.html">
+    <meta property="og:title" content="Hukuki Makaleler | Avukat Barış Hezer">
+    <meta property="og:description" content="Güncel yasal haklar, kira tespiti, icra itiraz süreçleri ve iş hukuku üzerine makaleler.">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=1200&q=80">
+    <!-- FontAwesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Favicon link -->
+    <link rel="icon" type="image/png" href="https://img.icons8.com/ios-filled/50/c5a059/scale.png">
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
+    <div class="nav-overlay"></div>
     <header>
         <nav class="navbar">
-            <a href="index.html" class="logo">AV. BARIŞ HEZER</a>
-            <div class="hamburger">&#9776;</div>
+            <a href="index.html" class="logo">
+                <div class="logo-icon-wrapper"><i class="fa-solid fa-scale-balanced"></i></div>
+                <div class="logo-text">
+                    <span class="lawyer-name">AV. BARIŞ HEZER</span>
+                    <span class="office-name">Avrupa Hukuk Bürosu</span>
+                </div>
+            </a>
+            <div class="hamburger">
+                <i class="fa-solid fa-bars"></i>
+            </div>
             <ul class="nav-links">
-                <li><a href="index.html">Ana Sayfa</a></li>
-                <li><a href="hakkimda.html">Hakkımda</a></li>
-                <li><a href="uzmanlik-alanlari.html">Çalışma Alanları</a></li>
-                <li><a href="makaleler.html" class="active">Makaleler</a></li>
-                <li><a href="iletisim.html">İletişim</a></li>
+                <li><a href="index.html"><i class="fa-solid fa-house"></i> Ana Sayfa</a></li>
+                <li><a href="hakkimda.html"><i class="fa-solid fa-user-tie"></i> Hakkımda</a></li>
+                <li><a href="uzmanlik-alanlari.html"><i class="fa-solid fa-gavel"></i> Çalışma Alanları</a></li>
+                <li><a href="makaleler.html" class="active"><i class="fa-solid fa-book-open"></i> Makaleler</a></li>
+                <li><a href="iletisim.html"><i class="fa-solid fa-envelope"></i> İletişim</a></li>
             </ul>
         </nav>
     </header>
     <main class="container">
-        <div class="section-title"><h2>Hukuki Makaleler</h2><div class="underline"></div></div>
-        <div class="grid-3">
-            <div class="card">
-                <h3>Kira Tespit Davaları Esasları</h3>
-                <p>Türk Borçlar Kanunu kapsamında kira bedelinin uyarlanması ve tespiti şartları.</p>
-            </div>
-            <div class="card">
-                <h3>İcra Takibine İtiraz Yolları</h3>
-                <p>İlamsız icra takiplerinde yetkiye ve borca itiraz süreleri ile hukuki sonuçları.</p>
-            </div>
+        <div class="section-title">
+            <h2>Hukuki Makaleler</h2>
+            <div class="underline"></div>
+        </div>
+
+        <div class="search-container">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="articleSearch" placeholder="Makaleler arasında canlı ara (örn: kira, icra, fesih)...">
+        </div>
+
+        <div class="grid-3" id="articles-container">
+            <!-- Makaleler buraya dinamik olarak yüklenecek -->
         </div>
     </main>
-    <footer><p>&copy; 2026 Av. Barış Hezer. | <a href="kvkk.html">KVKK Aydınlatma Metni</a></p></footer>
+    <footer>
+        <p>&copy; 2026 Av. Barış Hezer. Bütün hakları saklıdır. | <a href="kvkk.html"><i class="fa-solid fa-shield-halved"></i> KVKK Aydınlatma Metni</a></p>
+    </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const grid = document.getElementById('articles-container');
+            const searchInput = document.getElementById('articleSearch');
+            let allArticles = [];
+
+            try {
+                const res = await fetch('/api/articles');
+                allArticles = await res.json();
+
+                function renderArticles(data) {
+                    if (data.length === 0) {
+                        grid.innerHTML = '<p style="text-align:center; width:100%;">Henüz makale bulunmuyor.</p>';
+                        return;
+                    }
+                    grid.innerHTML = data.map(art => {
+                        return `
+                        <div class="card article-card">
+                            <div class="card-icon"><i class="fa-solid fa-book-open"></i></div>
+                            <h3 class="article-title">${art.title}</h3>
+                            <p class="article-desc">${art.summary || ''}</p>
+                            <a href="makale-detay.html?id=${art.id}" class="card-link">Makaleyi Oku <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                        </div>
+                        `;
+                    }).join('');
+                }
+
+                renderArticles(allArticles);
+
+                // Arama Filtreleme
+                searchInput.addEventListener('input', (e) => {
+                    const term = e.target.value.toLowerCase();
+                    const filtered = allArticles.filter(a =>
+                        a.title.toLowerCase().includes(term) ||
+                        (a.summary && a.summary.toLowerCase().includes(term))
+                    );
+                    renderArticles(filtered);
+                });
+
+            } catch (err) {
+                console.error(err);
+                grid.innerHTML = '<p>Makaleler yüklenirken bir hata oluştu.</p>';
+            }
+        });
+    </script>
     <script src="assets/js/main.js"></script>
 </body>
 </html>

@@ -10,9 +10,16 @@ ${headerCommon('index')}
 
     <section class="hero">
         <div class="hero-content">
-            <h1>Avukat Barış Hezer <span>Hukuki Danışmanlık</span></h1>
-            <p>Türkiye Barolar Birliği meslek kurallarına uygun, objektif, şeffaf ve güvenilir hukuki hizmetler.</p>
-            <a href="iletisim.html" class="btn"><i class="fa-solid fa-paper-plane"></i> İletişime Geçin</a>
+            <h1 class="hero-title">
+                Avukat Barış Hezer
+                <span class="hero-subtitle">AVRUPA HUKUK BÜROSU</span>
+            </h1>
+            <p class="hero-description">
+                Türkiye Barolar Birliği meslek kurallarına uygun, objektif, şeffaf ve güvenilir hukuki hizmetler.
+            </p>
+            <a href="iletisim.html" class="btn-hero">
+                <i class="fa-solid fa-paper-plane"></i> İletişime Geçin
+            </a>
         </div>
     </section>
 
