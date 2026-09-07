@@ -9,7 +9,7 @@
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: 'Inter', system-ui, sans-serif; background-color: var(--bg-dark); color: var(--text-light); line-height: 1.7; min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; }
+body { font-family: 'Inter', system-ui, sans-serif; background-color: #ffffff; color: #0d1b2a; line-height: 1.7; min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; }
 main { flex: 1; }
 h1, h2, h3 { font-family: 'Playfair Display', serif; }
 a { text-decoration: none; color: inherit; }
@@ -147,6 +147,7 @@ footer a:hover { color: var(--accent-hover); }
 
 /* HAKKIMDA SAYFASI ÖZEL TASARIM */
 .hakkimda-title {
+.container { background-color: #ffffff !important; }
     color: #000000 !important;
     text-align: center;
     margin-bottom: 2rem;
@@ -243,6 +244,54 @@ body.makaleler-page .card .article-desc,
 body.makaleler-page .card p {
     color: var(--text-muted) !important;
 }
+
 body.makaleler-page .card .read-more {
     color: var(--accent) !important;
+}
+
+/* İletişim Sayfası Beyaz Arka Plan Tema Ayarları (Kartlar Orijinal Koyu Kalacak) */
+body.iletisim-page {
+    background-color: #ffffff !important;
+    color: #0d1b2a !important;
+}
+body.iletisim-page .section-title h2 {
+    color: #0d1b2a !important;
+}
+body.iletisim-page .contact-wrapper {
+    background: var(--card-dark) !important;
+    color: var(--text-light) !important;
+    border: 1px solid rgba(197, 160, 89, 0.2) !important;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.15) !important;
+}
+body.iletisim-page .contact-wrapper h3 {
+    color: var(--text-light) !important;
+}
+body.iletisim-page .contact-item div h4 {
+    color: var(--text-light) !important;
+}
+body.iletisim-page .contact-item div p,
+body.iletisim-page .contact-item div a {
+    color: var(--text-muted) !important;
+}
+body.iletisim-page .contact-item div a:hover {
+    color: var(--accent) !important;
+}
+body.iletisim-page .form-group label {
+    color: var(--text-light) !important;
+}
+body.iletisim-page .form-group input,
+body.iletisim-page .form-group textarea,
+body.iletisim-page .form-group select {
+    background: var(--bg-dark) !important;
+    color: var(--text-light) !important;
+    border: 1px solid rgba(197, 160, 89, 0.3) !important;
+}
+body.iletisim-page .form-group input:focus,
+body.iletisim-page .form-group textarea:focus,
+body.iletisim-page .form-group select:focus {
+    border-color: var(--accent) !important;
+    box-shadow: 0 0 0 3px rgba(197, 160, 89, 0.15) !important;
+}
+body.iletisim-page .checkbox-group label {
+    color: var(--text-muted) !important;
 }

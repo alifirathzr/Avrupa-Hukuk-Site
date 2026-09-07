@@ -56,4 +56,51 @@ footer a:hover { text-decoration: underline; }
     .logo-text .lawyer-name { font-size: 1.05rem; }
     .logo-text .office-name { font-size: 0.65rem; }
 }
+
+/* İletişim Sayfası Beyaz Arka Plan Tema Ayarları (Kartlar Orijinal Koyu Kalacak) */
+body.iletisim-page {
+    background-color: #ffffff !important;
+    color: #0d1b2a !important;
+}
+body.iletisim-page .section-title h2 {
+    color: #0d1b2a !important;
+}
+body.iletisim-page .contact-wrapper {
+    background: var(--card-dark) !important;
+    color: var(--text-light) !important;
+    border: 1px solid rgba(197, 160, 89, 0.2) !important;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.15) !important;
+}
+body.iletisim-page .contact-wrapper h3 {
+    color: var(--text-light) !important;
+}
+body.iletisim-page .contact-item div h4 {
+    color: var(--text-light) !important;
+}
+body.iletisim-page .contact-item div p,
+body.iletisim-page .contact-item div a {
+    color: var(--text-muted) !important;
+}
+body.iletisim-page .contact-item div a:hover {
+    color: var(--accent) !important;
+}
+body.iletisim-page .form-group label {
+    color: var(--text-light) !important;
+}
+body.iletisim-page .form-group input,
+body.iletisim-page .form-group textarea,
+body.iletisim-page .form-group select {
+    background: var(--bg-dark) !important;
+    color: var(--text-light) !important;
+    border: 1px solid rgba(197, 160, 89, 0.3) !important;
+}
+body.iletisim-page .form-group input:focus,
+body.iletisim-page .form-group textarea:focus,
+body.iletisim-page .form-group select:focus {
+    border-color: var(--accent) !important;
+    box-shadow: 0 0 0 3px rgba(197, 160, 89, 0.15) !important;
+}
+body.iletisim-page .checkbox-group label {
+    color: var(--text-muted) !important;
+}
 `;
