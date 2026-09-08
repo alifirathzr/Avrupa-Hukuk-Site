@@ -1,12 +1,27 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const helmet = require('helmet');
 const sqlite3 = require('sqlite3').verbose();
 const nodemailer = require('nodemailer');
 const path = require('path');
 
 const app = express();
 const db = new sqlite3.Database('./database.db');
+
+// CSP ayarlarını yapılandır
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "https://cdnjs.cloudflare.com", "'unsafe-inline'"],
+      styleSrc: ["'self'", "https://cdnjs.cloudflare.com", "'unsafe-inline'"],
+      fontSrc: ["'self'", "https://cdnjs.cloudflare.com"],
+      imgSrc: ["'self'", "data:", "https://images.unsplash.com", "https://img.icons8.com"],
+      connectSrc: ["'self'"],
+    },
+  },
+}));
 
 // DEBUG & CATEGORY DELETE (En üst sırada olmalı)
 app.delete('/api/categories/:id', (req, res) => {
@@ -242,6 +257,13 @@ app.delete('/api/articles/:id', (req, res) => {
 app.get('/api/faqs', (req, res) => {
     db.all("SELECT * FROM faqs", [], (err, rows) => { res.json(rows); });
 });
+
+// Dinamik makale listeleme sayfası rotası
+const makalelerListeTemplate = require('./templates/html_makaleler_liste.js');
+app.get('/makaleler-liste.html', (req, res) => {
+    res.send(makalelerListeTemplate);
+});
+
 
 app.post('/api/faqs', (req, res) => {
     const { question, answer } = req.body;

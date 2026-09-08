@@ -1,115 +1,174 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
+
 <html lang="tr">
+
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hukuki Makaleler | Avukat Barış Hezer</title>
-    <meta name="description" content="Avukat Barış Hezer'in güncel yasal düzenlemeler, yargıtay kararları ve hukuki analizler içeren bilgilendirici makalelerini okuyun.">
+
+    <title>Hukuki Makaleler | Avukat Baris Hezer</title>
+
+    <meta name="description" content="Avukat Baris Hezer'in güncel yasal düzenlemeler, yargitay kararlari ve hukuki analizler içeren bilgilendirici makalelerini okuyun.">
+
     <!-- Open Graph / Facebook -->
+
     <meta property="og:type" content="website">
+
     <meta property="og:url" content="https://barishezer.av.tr/makaleler.html">
-    <meta property="og:title" content="Hukuki Makaleler | Avukat Barış Hezer">
-    <meta property="og:description" content="Güncel yasal haklar, kira tespiti, icra itiraz süreçleri ve iş hukuku üzerine makaleler.">
+
+    <meta property="og:title" content="Hukuki Makaleler | Avukat Baris Hezer">
+
+    <meta property="og:description" content="Güncel yasal haklar, kira tespiti, icra itiraz süreçleri ve is hukuku üzerine makaleler.">
+
     <meta property="og:image" content="https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=1200&q=80">
+
     <!-- FontAwesome CDN -->
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
     <!-- Favicon link -->
+
     <link rel="icon" type="image/png" href="https://img.icons8.com/ios-filled/50/c5a059/scale.png">
+
     <link rel="stylesheet" href="assets/css/style.css">
+
 </head>
+
 <body style="background-color: white;" class="makaleler-page">
+
     <div class="nav-overlay"></div>
+
     <header>
+
         <nav class="navbar">
+
             <a href="index.html" class="logo">
+
                 <div class="logo-icon-wrapper"><i class="fa-solid fa-scale-balanced"></i></div>
+
                 <div class="logo-text">
-                    <span class="lawyer-name">AV. BARIŞ HEZER</span>
+
+                    <span class="lawyer-name">AV. BARIS HEZER</span>
+
                     <span class="office-name">Avrupa Hukuk Bürosu</span>
+
                 </div>
+
             </a>
+
             <div class="hamburger">
+
                 <i class="fa-solid fa-bars"></i>
+
             </div>
+
             <ul class="nav-links">
+
                 <li><a href="index.html"><i class="fa-solid fa-house"></i> Ana Sayfa</a></li>
-                <li><a href="hakkimda.html"><i class="fa-solid fa-user-tie"></i> Hakkımda</a></li>
-                <li><a href="uzmanlik-alanlari.html"><i class="fa-solid fa-gavel"></i> Çalışma Alanları</a></li>
+
+                <li><a href="hakkimda.html"><i class="fa-solid fa-user-tie"></i> Hakkimda</a></li>
+
+                <li><a href="uzmanlik-alanlari.html"><i class="fa-solid fa-gavel"></i> Çalisma Alanlari</a></li>
+
                 <li><a href="makaleler.html" class="active"><i class="fa-solid fa-book-open"></i> Makaleler</a></li>
-                <li><a href="iletisim.html"><i class="fa-solid fa-envelope"></i> İletişim</a></li>
+
+                <li><a href="iletisim.html"><i class="fa-solid fa-envelope"></i> Iletisim</a></li>
+
             </ul>
+
         </nav>
+
     </header>
+
     <main class="container">
+
         <div class="section-title">
+
             <h2>Hukuki Makaleler</h2>
+
             <div class="underline"></div>
+
         </div>
+
+
 
         <div class="search-container">
+
             <i class="fa-solid fa-magnifying-glass"></i>
-            <input type="text" id="articleSearch" placeholder="Makaleler arasında canlı ara (örn: kira, icra, fesih)...">
+
+            <input type="text" id="articleSearch" placeholder="Makaleler arasinda canli ara (örn: kira, icra, fesih)...">
+
         </div>
 
-        <div class="grid-3" id="articles-container">
-            <!-- Makaleler buraya dinamik olarak yüklenecek -->
+
+
+        <div id="categories-container" class="grid-3" style="margin-bottom: 3rem;">
+
+            <!-- Kategoriler buraya yüklenecek -->
+
         </div>
+
     </main>
+
     <footer>
-        <p>&copy; 2026 Av. Barış Hezer - Avrupa Hukuk Bürosu. Bütün hakları saklıdır. | <a href="mailto:barishezer@gmail.com"><i class="fa-solid fa-envelope"></i> barishezer@gmail.com</a> | <a href="kvkk.html"><i class="fa-solid fa-shield-halved"></i> KVKK Aydınlatma Metni</a></p>
+
+        <p>&copy; 2026 Av. Baris Hezer - Avrupa Hukuk Bürosu. Bütün haklari saklidir. | <a href="mailto:barishezer@gmail.com"><i class="fa-solid fa-envelope"></i> barishezer@gmail.com</a> | <a href="kvkk.html"><i class="fa-solid fa-shield-halved"></i> KVKK Aydinlatma Metni</a></p>
+
     </footer>
+
     <script>
+
         document.addEventListener('DOMContentLoaded', async () => {
-            const grid = document.getElementById('articles-container');
-            const searchInput = document.getElementById('articleSearch');
-            let allArticles = [];
 
-            try {
-                const res = await fetch('/api/articles');
-                allArticles = await res.json();
+            const catContainer = document.getElementById('categories-container');
 
-                function renderArticles(data) {
-                    if (data.length === 0) {
-                        grid.innerHTML = '<p style="text-align:center; width:100%;">Henüz makale bulunmuyor.</p>';
-                        return;
-                    }
-                    grid.innerHTML = data.map(art => {
-                        return `
-                        <a href="makale-detay.html?id=${art.id}" class="card article-card" style="text-decoration: none; cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;">
-                            <div class="card-icon"><i class="fa-solid fa-book-open"></i></div>
-                            <h3 class="article-title">${art.title}</h3>
-                            <p class="article-desc">${art.summary || ''}</p>
-                            <span class="read-more">Makaleyi Oku <i class="fa-solid fa-arrow-right"></i></span>
-                        </a>
-                        `;
-                    }).join('');
-                }
+            const categories = [
+                { name: "Ceza Hukuku", icon: "fa-gavel", desc: "Soruşturma ve kovuşturma süreçleri hakkında temel bilgiler." },
+                { name: "Tazminat Hukuku", icon: "fa-scale-balanced", desc: "Maddi ve manevi tazminat talepleri." },
+                { name: "Gayrimenkul Hukuku", icon: "fa-house-chimney", desc: "Tapu ve kira uyuşmazlıkları." },
+                { name: "Medeni Hukuk", icon: "fa-users", desc: "Aile hukuku, boşanma ve miras." },
+                { name: "Borçlar Hukuku", icon: "fa-file-contract", desc: "Sözleşmeler ve alacak takibi." },
+                { name: "İdare ve Vergi Hukuku", icon: "fa-building-columns", desc: "Kamu ve vergi ihtilafları." },
+                { name: "Bireysel Başvuru", icon: "fa-landmark", desc: "AYM ve AİHM başvuru süreçleri." },
+                { name: "Arabuluculuk", icon: "fa-handshake", desc: "Dava öncesi çözüm yöntemleri." },
+                { name: "Mevzuat", icon: "fa-book", desc: "Güncel yasal düzenlemeler." }
+            ];
 
-                renderArticles(allArticles);
+            catContainer.innerHTML = categories.map(cat => `
+                <a href="makaleler-liste.html?kategori=${encodeURIComponent(cat.name)}" class="card category-card">
+                    <div class="card-icon"><i class="fa-solid ${cat.icon}"></i></div>
+                    <h3>${cat.name}</h3>
+                    <p>${cat.desc}</p>
+                </a>
+            `).join('');
 
-                // Arama Filtreleme
-                searchInput.addEventListener('input', (e) => {
-                    const term = e.target.value.toLowerCase();
-                    const filtered = allArticles.filter(a =>
-                        a.title.toLowerCase().includes(term) ||
-                        (a.summary && a.summary.toLowerCase().includes(term))
-                    );
-                    renderArticles(filtered);
-                });
-
-            } catch (err) {
-                console.error(err);
-                grid.innerHTML = '<p>Makaleler yüklenirken bir hata oluştu.</p>';
-            }
         });
+
     </script>
+
     
-    <!-- WhatsApp Floating Butonu (Sağ Alt / Bottom-Right) -->
-    <a href="https://wa.me/905000000000" class="whatsapp-float" target="_blank" rel="noopener noreferrer" title="WhatsApp İletişim Hattı" aria-label="WhatsApp İletişim Hattı">
+
+    <!-- WhatsApp Floating Butonu (Sag Alt / Bottom-Right) -->
+
+    <a href="https://wa.me/905000000000" class="whatsapp-float" target="_blank" rel="noopener noreferrer" title="WhatsApp Iletisim Hatti" aria-label="WhatsApp Iletisim Hatti">
+
         <i class="fa-brands fa-whatsapp"></i>
-        <span class="whatsapp-tooltip">WhatsApp Danışma Hattı</span>
+
+        <span class="whatsapp-tooltip">WhatsApp Danisma Hatti</span>
+
     </a>
 
+
+
     <script src="assets/js/main.js"></script>
+
 </body>
+
 </html>
+
+
+
+
+
