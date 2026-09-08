@@ -34,7 +34,6 @@ const headerCommon = (activePage) => `
                 <li><a href="uzmanlik-alanlari.html" class="${activePage === 'uzmanlik' ? 'active' : ''}"><i class="fa-solid fa-gavel"></i> Çalışma Alanları</a></li>
                 <li><a href="makaleler.html" class="${activePage === 'makaleler' ? 'active' : ''}"><i class="fa-solid fa-book-open"></i> Makaleler</a></li>
                 <li><a href="iletisim.html" class="${activePage === 'iletisim' ? 'active' : ''}"><i class="fa-solid fa-envelope"></i> İletişim</a></li>
-                <li><a href="admin.html" class="${activePage === 'admin' ? 'active' : ''}" style="color: var(--accent);"><i class="fa-solid fa-gear"></i> Panel</a></li>
             </ul>
         </nav>
     </header>
