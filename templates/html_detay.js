@@ -59,8 +59,8 @@ module.exports = `<!DOCTYPE html>
 
             function setBackCategory(category) {
                 if (backBtn && category) {
-                    backBtn.href = `makaleler-liste.html?kategori=${encodeURIComponent(category)}`;
-                    backBtn.innerHTML = `<i class="fa-solid fa-arrow-left"></i> ${category} Makalelerine Dön`;
+                    backBtn.href = \`makaleler-liste.html?kategori=\${encodeURIComponent(category)}\`;
+                    backBtn.innerHTML = \`<i class="fa-solid fa-arrow-left"></i> \${category} Makalelerine Dön\`;
                 }
             }
 
