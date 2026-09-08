@@ -45,17 +45,6 @@ const floatingAndNav = (activePage) => `
         <i class="fa-brands fa-whatsapp"></i>
         <span class="whatsapp-tooltip">WhatsApp Danışma Hattı</span>
     </a>
-
-    <!-- Sabit Alt Menü (Bottom Navigation - Mobil) -->
-    <nav class="bottom-nav">
-        <ul class="bottom-nav-items">
-            <li><a href="index.html" class="bottom-nav-link ${activePage === 'index' ? 'active' : ''}"><i class="fa-solid fa-house"></i><span>Ana Sayfa</span></a></li>
-            <li><a href="hakkimda.html" class="bottom-nav-link ${activePage === 'hakkimda' ? 'active' : ''}"><i class="fa-solid fa-user-tie"></i><span>Hakkımda</span></a></li>
-            <li><a href="uzmanlik-alanlari.html" class="bottom-nav-link ${activePage === 'uzmanlik' ? 'active' : ''}"><i class="fa-solid fa-gavel"></i><span>Alanlar</span></a></li>
-            <li><a href="makaleler.html" class="bottom-nav-link ${activePage === 'makaleler' ? 'active' : ''}"><i class="fa-solid fa-book-open"></i><span>Makaleler</span></a></li>
-            <li><a href="iletisim.html" class="bottom-nav-link ${activePage === 'iletisim' ? 'active' : ''}"><i class="fa-solid fa-envelope"></i><span>İletişim</span></a></li>
-        </ul>
-    </nav>
 `;
 
 const footerCommon = `
