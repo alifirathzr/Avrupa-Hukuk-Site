@@ -149,4 +149,35 @@ document.addEventListener('DOMContentLoaded', () => {
         accordion.querySelectorAll('.accordion-item').forEach(other => other.classList.remove('active'));
         if (!isActive) item.classList.add('active');
     });
+
+    // 6. Navbar Scroll Behavior (Aşağı kaydırınca gizle, yukarı kaydırınca göster)
+    let lastScroll = 0;
+    const delta = 5;
+    const headerEl = document.querySelector('header');
+
+    if (headerEl) {
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+
+            if (currentScroll <= 80) {
+                headerEl.classList.remove('nav-hidden');
+                lastScroll = currentScroll;
+                return;
+            }
+
+            if (Math.abs(currentScroll - lastScroll) <= delta) {
+                return;
+            }
+
+            if (currentScroll > lastScroll) {
+                // Aşağı kaydırma
+                headerEl.classList.add('nav-hidden');
+            } else {
+                // Yukarı kaydırma (birazcık yukarı kaydırıldığında navbar açılır)
+                headerEl.classList.remove('nav-hidden');
+            }
+
+            lastScroll = currentScroll <= 0 ? 0 : currentScroll;
+        }, { passive: true });
+    }
 });
