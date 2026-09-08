@@ -258,8 +258,9 @@ app.get('/api/faqs', (req, res) => {
     db.all("SELECT * FROM faqs", [], (err, rows) => { res.json(rows); });
 });
 
-// Dinamik makale listeleme sayfası rotası
+const { headCommon, headerCommon, floatingAndNav, footerCommon } = require('./templates/common');
 const makalelerListeTemplate = require('./templates/html_makaleler_liste.js');
+
 app.get('/makaleler-liste.html', (req, res) => {
     res.send(makalelerListeTemplate);
 });
