@@ -270,6 +270,27 @@
             </div>
         </div>
     </div>
+
+    <!-- Message Detail Modal -->
+    <div id="messageDetailModal" class="custom-modal-overlay" style="display:none;">
+        <div class="custom-modal" style="max-width: 600px; text-align: left;">
+            <h3>İletişim Mesajı Detayı</h3>
+            <div style="margin-bottom: 1rem;">
+                <p style="margin: 0.5rem 0;"><strong>Tarih:</strong> <span id="modalMsgDate"></span></p>
+                <p style="margin: 0.5rem 0;"><strong>Ad Soyad:</strong> <span id="modalMsgName"></span></p>
+                <p style="margin: 0.5rem 0;"><strong>E-posta:</strong> <span id="modalMsgEmail"></span></p>
+                <p style="margin: 0.5rem 0;"><strong>Telefon:</strong> <span id="modalMsgPhone"></span></p>
+                <p style="margin: 0.5rem 0;"><strong>Konu:</strong> <span id="modalMsgSubject"></span></p>
+            </div>
+            <div style="margin-bottom: 1.5rem;">
+                <strong>Mesaj:</strong>
+                <div id="modalMsgContent" style="background: #f8f9fa; padding: 1rem; border-radius: 6px; border: 1px solid var(--border); margin-top: 0.5rem; max-height: 250px; overflow-y: auto; white-space: pre-wrap; word-break: break-word;"></div>
+            </div>
+            <div class="custom-modal-btns" style="justify-content: flex-end;">
+                <button type="button" id="closeMsgModalBtn" style="background: var(--primary); color: white;">Kapat</button>
+            </div>
+        </div>
+    </div>
     <div class="dashboard">
         <h1>Admin Dashboard</h1>
         <div class="card">
@@ -425,17 +446,53 @@
             loadCategories();
             loadFAQs();
         }
+        let allMessages = [];
         async function loadMessages() {
             try {
                 const res = await fetch('/api/admin/messages');
                 if (!res.ok) return;
                 const data = await res.json();
+                allMessages = data;
                 const body = document.getElementById('messageBody');
-                body.innerHTML = data.map(m => `<tr><td>${new Date(m.date).toLocaleDateString()}</td><td>${m.name}</td><td>${m.email}</td><td>${m.subject}</td><td><button class="btn-del" onclick="deleteItem('admin/messages', ${m.id})">Sil</button></td></tr>`).join('');
+                body.innerHTML = data.map(m => `
+                    <tr style="cursor: pointer;" onclick="openMessageModal(${m.id})" title="Detayları görmek için tıklayın">
+                        <td>${m.date ? new Date(m.date).toLocaleDateString() : '-'}</td>
+                        <td>${m.name || '-'}</td>
+                        <td>${m.email || '-'}</td>
+                        <td>${m.subject || '-'}</td>
+                        <td onclick="event.stopPropagation()">
+                            <button class="btn-del" onclick="deleteItem('admin/messages', ${m.id})">Sil</button>
+                        </td>
+                    </tr>
+                `).join('');
             } catch (e) {
                 console.error("Mesajlar yüklenemedi:", e);
             }
         }
+
+        function openMessageModal(id) {
+            const msg = allMessages.find(m => m.id === id);
+            if (!msg) return;
+
+            document.getElementById('modalMsgDate').textContent = msg.date ? new Date(msg.date).toLocaleString() : '-';
+            document.getElementById('modalMsgName').textContent = msg.name || '-';
+            document.getElementById('modalMsgEmail').textContent = msg.email || '-';
+            document.getElementById('modalMsgPhone').textContent = msg.phone || '-';
+            document.getElementById('modalMsgSubject').textContent = msg.subject || '-';
+            document.getElementById('modalMsgContent').textContent = msg.message || '-';
+
+            document.getElementById('messageDetailModal').style.display = 'flex';
+        }
+
+        document.getElementById('closeMsgModalBtn').onclick = () => {
+            document.getElementById('messageDetailModal').style.display = 'none';
+        };
+
+        document.getElementById('messageDetailModal').onclick = (e) => {
+            if (e.target.id === 'messageDetailModal') {
+                document.getElementById('messageDetailModal').style.display = 'none';
+            }
+        };
         async function loadCategories() {
             try {
                 const res = await fetch('/api/categories');

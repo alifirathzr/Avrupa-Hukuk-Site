@@ -38,6 +38,7 @@ module.exports = `<!DOCTYPE html>
                 </div>
                 <h1 style="color: var(--primary); margin-bottom: 1.5rem; font-size: 2.2rem;" id="detayTitle">Hukuki Makale Detayı</h1>
                 <div class="underline" style="margin: 0 0 2rem 0; height: 3px; width: 80px; background-color: var(--accent);"></div>
+                <p id="detaySummary" style="font-size: 1.15rem; color: #4a5568; line-height: 1.8; margin-bottom: 2rem; font-weight: 400; display: none;"></p>
                 <div id="detayText" style="font-size: 1.05rem; line-height: 1.8;">
                     <p>Yükleniyor...</p>
                 </div>
@@ -53,6 +54,7 @@ module.exports = `<!DOCTYPE html>
             const params = new URLSearchParams(window.location.search);
             const id = params.get('id');
             const titleEl = document.getElementById('detayTitle');
+            const summaryEl = document.getElementById('detaySummary');
             const textEl = document.getElementById('detayText');
             const dateEl = document.getElementById('detayDate');
             const backBtn = document.getElementById('backBtn');
@@ -93,6 +95,12 @@ module.exports = `<!DOCTYPE html>
             }
             if (db[id]) {
                 titleEl.textContent = db[id].title;
+                if (summaryEl && db[id].summary) {
+                    summaryEl.textContent = db[id].summary;
+                    summaryEl.style.display = 'block';
+                } else if (summaryEl) {
+                    summaryEl.style.display = 'none';
+                }
                 textEl.innerHTML = db[id].text;
                 document.title = db[id].title + " | Avukat Barış Hezer";
                 if (db[id].category) {
@@ -104,6 +112,12 @@ module.exports = `<!DOCTYPE html>
                     if (!res.ok) throw new Error('Makale bulunamadı');
                     const article = await res.json();
                     titleEl.textContent = article.title;
+                    if (summaryEl && article.summary) {
+                        summaryEl.textContent = article.summary;
+                        summaryEl.style.display = 'block';
+                    } else if (summaryEl) {
+                        summaryEl.style.display = 'none';
+                    }
                     textEl.innerHTML = article.content;
                     if (article.date) {
                         const formattedDate = new Date(article.date).toLocaleDateString('tr-TR', { year: 'numeric', month: 'long', day: 'numeric' });

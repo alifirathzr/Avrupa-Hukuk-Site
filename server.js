@@ -104,7 +104,7 @@ const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
         user: 'hezeralifirat@gmail.com',
-        pass: 'Bczsf psuh emmy qbki'
+        pass: 'uzto gliu mmvq bhpz'
     }
 });
 
@@ -184,7 +184,7 @@ app.post('/api/contact', (req, res) => {
         try {
             transporter.sendMail({
                 from: '"Av. Barış Hezer" <hezeralifirat@gmail.com>',
-                to: 'hezeralifirat@gmail.com',
+                to: 'barishezer@gmail.com',
                 subject: 'Yeni İletişim Formu: ' + subject,
                 html: `
                     <h2>Yeni İletişim Mesajı</h2>
