@@ -50,6 +50,8 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             const name = document.getElementById('name').value.trim();
             const email = document.getElementById('email').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const subject = document.getElementById('subject').value.trim();
             const message = document.getElementById('message').value.trim();
             const kvkkCheck = document.getElementById('kvkkCheck').checked;
 
@@ -62,8 +64,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            showToast('Mesajınız başarıyla iletildi. En kısa sürede dönüş yapılacaktır.', 'success');
-            contactForm.reset();
+            fetch('/api/contact', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, email, phone, subject, message })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    showToast('Mesajınız başarıyla iletildi. En kısa sürede dönüş yapılacaktır.', 'success');
+                    contactForm.reset();
+                } else {
+                    showToast('Mesaj gönderilirken bir hata oluştu: ' + data.message, 'error');
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                showToast('Sunucuya ulaşılamadı.', 'error');
+            });
         });
     }
 

@@ -84,6 +84,14 @@ module.exports = `<!DOCTYPE html>
                         <input type="email" id="email" required placeholder="E-posta adresinizi giriniz">
                     </div>
                     <div class="form-group">
+                        <label for="phone">Telefon Numaranız</label>
+                        <input type="tel" id="phone" placeholder="Telefon numaranızı giriniz (Opsiyonel)">
+                    </div>
+                    <div class="form-group">
+                        <label for="subject">Konu</label>
+                        <input type="text" id="subject" placeholder="Mesajınızın konusu">
+                    </div>
+                    <div class="form-group">
                         <label for="message">Mesajınız *</label>
                         <textarea id="message" rows="5" required placeholder="Uyuşmazlığınızın detaylarını özetleyiniz..."></textarea>
                     </div>
@@ -91,7 +99,7 @@ module.exports = `<!DOCTYPE html>
                         <input type="checkbox" id="kvkkCheck" required>
                         <label for="kvkkCheck"><a href="kvkk.html" target="_blank">KVKK Aydınlatma Metni</a>'ni okudum ve kabul ediyorum. *</label>
                     </div>
-                    <button type="submit" class="btn" style="width: 100%; justify-content: center;"><i class="fa-solid fa-paper-plane"></i> Mesajı Gönder</button>
+                    <button type="submit" class="btn" style="width: 100%; justify-content: center; background-color: var(--accent); color: var(--bg-dark); padding: 0.75rem 1rem; border: none; border-radius: 6px; cursor: pointer; transition: var(--transition);"><i class="fa-solid fa-paper-plane"></i> Mesajı Gönder</button>
                 </form>
             </div>
         </div>
