@@ -12,8 +12,8 @@ module.exports = `<!DOCTYPE html>
 <body style="background-color: #ffffff;">
     ${headerCommon('makaleler')}
     <main class="container" style="padding-top: 2rem;">
-        <h2 id="cat-title" style="color: #0d1b2a; margin-bottom: 2rem;"></h2>
-        <a href="makaleler.html" class="btn" style="margin-bottom: 2rem; display: inline-block; background: var(--bg-dark); color: white; padding: 0.5rem 1rem; border-radius: 5px; border: 1px solid var(--accent);"><i class="fa-solid fa-arrow-left"></i> Kategorilere Geri Dön</a>
+        <h2 id="cat-title" style="color: #0d1b2a; font-size: 2.2rem; font-weight: 700; margin-bottom: 1.5rem; border-left: 5px solid #c5a059; padding-left: 1rem; font-family: 'Playfair Display', serif;"></h2>
+        <a href="makaleler.html" class="btn" style="margin-bottom: 2.5rem; display: inline-flex; align-items: center; gap: 0.5rem; background: #0d1b2a; color: #ffffff; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 600; text-decoration: none; transition: all 0.3s ease; box-shadow: 0 4px 6px rgba(0,0,0,0.1);"><i class="fa-solid fa-arrow-left"></i> Kategorilere Geri Dön</a>
         <div class="grid-3" id="articles-list"></div>
     </main>
     ${floatingAndNav('makaleler')}
@@ -36,7 +36,7 @@ module.exports = `<!DOCTYPE html>
                     <p style="color: var(--text-muted); margin-bottom: 1rem;">\${art.summary || ''}</p>
                     <span style="color: var(--accent);">Makaleyi Oku <i class="fa-solid fa-arrow-right"></i></span>
                 </a>
-            \`).join('') : '<p style="color: white;">Bu kategoride henüz makale bulunmuyor.</p>';
+            \`).join('') : '<div style="grid-column: 1 / -1; background: #f8f9fa; padding: 3rem 2rem; border-radius: 12px; border: 1px dashed #c5a059; text-align: center; color: #4b5563; font-size: 1.15rem; font-weight: 500;"><i class="fa-solid fa-folder-open" style="font-size: 2.5rem; color: #c5a059; display: block; margin-bottom: 1rem;"></i>Bu kategoride henüz makale bulunmuyor.</div>';
         });
     </script>
 </body>
