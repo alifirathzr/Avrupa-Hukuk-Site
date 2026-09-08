@@ -1,7 +1,9 @@
+require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
 const sqlite3 = require('sqlite3').verbose();
 const nodemailer = require('nodemailer');
 const path = require('path');
@@ -9,7 +11,7 @@ const path = require('path');
 const app = express();
 const db = new sqlite3.Database('./database.db');
 
-// CSP ve Güvenlik başlıklarını yapılandır (Yerel IP testleri için HSTS, COOP, OAC kısıtlamaları kapatıldı)
+// CSP ve Güvenlik başlıklarını yapılandır
 app.use(helmet({
   crossOriginOpenerPolicy: false,
   crossOriginEmbedderPolicy: false,
@@ -22,32 +24,12 @@ app.use(helmet({
       scriptSrcAttr: ["'unsafe-inline'"],
       styleSrc: ["'self'", "https://cdnjs.cloudflare.com", "'unsafe-inline'"],
       fontSrc: ["'self'", "https://cdnjs.cloudflare.com"],
-      imgSrc: ["'self'", "data:", "https://images.unsplash.com", "https://img.icons8.com", "https://images.unsplash.com", "https://img.icons8.com", "https://maps.gstatic.com", "https://maps.googleapis.com", "https://*.google.com", "https://*.googleapis.com"],
+      imgSrc: ["'self'", "data:", "https://images.unsplash.com", "https://img.icons8.com", "https://maps.gstatic.com", "https://maps.googleapis.com", "https://*.google.com", "https://*.googleapis.com"],
       frameSrc: ["'self'", "https://maps.google.com", "https://www.google.com", "https://*.google.com"],
       connectSrc: ["'self'", "https://maps.googleapis.com", "https://*.googleapis.com"],
     },
   },
 }));
-
-// DEBUG & CATEGORY DELETE (En üst sırada olmalı)
-app.delete('/api/categories/:id', (req, res) => {
-  const { id } = req.params;
-  console.log(`>>> DELETE isteği yakalandı. ID: ${id}`);
-  
-  db.run("DELETE FROM categories WHERE id = ?", [id], function(err) {
-    if (err) {
-      console.error("Kategori silme hatası:", err);
-      return res.status(500).json({ error: err.message });
-    }
-    if (this.changes > 0) {
-      console.log(`>>> ID ${id} kategorisi silindi.`);
-      return res.json({ success: true, message: "Kategori silindi." });
-    } else {
-      console.warn(`>>> ID ${id} veritabanında bulunamadı.`);
-      return res.status(404).json({ error: "Kategori bulunamadı." });
-    }
-  });
-});
 
 app.use(cors());
 app.use(express.json({ limit: '50mb' }));
@@ -103,9 +85,16 @@ db.serialize(() => {
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: 'hezeralifirat@gmail.com',
-        pass: 'uzto gliu mmvq bhpz'
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
     }
+});
+
+// Rate limiter for contact form
+const contactLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 5,
+    message: { success: false, message: 'Çok fazla mesaj gönderildi. Lütfen daha sonra tekrar deneyin.' }
 });
 
 // Kategori Görsel Eşleşmesi
@@ -177,14 +166,14 @@ app.get('/api/admin/messages', (req, res) => {
   }
 });
 
-app.post('/api/contact', (req, res) => {
+app.post('/api/contact', contactLimiter, (req, res) => {
     const { name, email, phone, subject, message } = req.body;
     db.run("INSERT INTO messages (name, email, phone, subject, message) VALUES (?, ?, ?, ?, ?)", [name, email, phone, subject, message], function(err) {
         if (err) return res.status(500).json({ success: false, message: "Veritabanı hatası" });
         try {
             transporter.sendMail({
-                from: '"Av. Barış Hezer" <hezeralifirat@gmail.com>',
-                to: 'barishezer@gmail.com',
+                from: `"Av. Barış Hezer" <${process.env.EMAIL_USER}>`,
+                to: process.env.EMAIL_USER,
                 subject: 'Yeni İletişim Formu: ' + subject,
                 html: `
                     <h2>Yeni İletişim Mesajı</h2>
@@ -201,14 +190,6 @@ app.post('/api/contact', (req, res) => {
             console.error('Mail servisi hatası:', e);
         }
         res.status(200).json({ success: true, message: "Mesajınız alındı" });
-    });
-});
-
-// Admin API - Messages
-app.get('/api/admin/messages', (req, res) => {
-    db.all("SELECT * FROM messages ORDER BY date DESC", [], (err, rows) => {
-        if (err) return res.status(500).json({ error: err.message });
-        res.json(rows);
     });
 });
 
