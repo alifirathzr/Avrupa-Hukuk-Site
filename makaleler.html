@@ -145,9 +145,15 @@
                     catContainer.innerHTML = categories.map(cat => {
                         const icon = iconMap[cat.name] || "fa-scale-balanced";
                         const desc = cat.description || "Hukuki analizler ve güncel makaleler.";
+                        
+                        let iconHtml = `<i class="fa-solid ${icon}"></i>`;
+                        if (cat.image_url && (cat.image_url.startsWith('http://') || cat.image_url.startsWith('https://') || cat.image_url.startsWith('data:'))) {
+                            iconHtml = `<img src="${cat.image_url}" alt="" style="width: 56px; height: 56px; object-fit: contain; border-radius: 12px; background: transparent; box-shadow: 0 4px 12px rgba(197, 160, 89, 0.2); border: 2px solid #c5a059;" onerror="this.onerror=null; this.parentElement.innerHTML='<i class=\'fa-solid ${icon}\'></i>';" />`;
+                        }
+
                         return `
                             <a href="makaleler-liste.html?kategori=${encodeURIComponent(cat.name)}" class="card category-card">
-                                <div class="card-icon"><i class="fa-solid ${icon}"></i></div>
+                                <div class="card-icon">${iconHtml}</div>
                                 <h3>${cat.name}</h3>
                                 <p>${desc}</p>
                             </a>
@@ -166,7 +172,7 @@
 
     <!-- WhatsApp Floating Butonu (Sag Alt / Bottom-Right) -->
 
-    <a href="https://wa.me/905000000000" class="whatsapp-float" target="_blank" rel="noopener noreferrer" title="WhatsApp Iletisim Hatti" aria-label="WhatsApp Iletisim Hatti">
+    <a href="https://wa.me/905325588865" class="whatsapp-float" target="_blank" rel="noopener noreferrer" title="WhatsApp Iletisim Hatti" aria-label="WhatsApp Iletisim Hatti">
 
         <i class="fa-brands fa-whatsapp"></i>
 

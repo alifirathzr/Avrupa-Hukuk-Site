@@ -58,7 +58,7 @@ module.exports = `<!DOCTYPE html>
                         <i class="fa-solid fa-envelope"></i>
                         <div>
                             <h4>E-posta</h4>
-                            <p><a href="mailto:info@barishezer.av.tr" style="font-weight: 600; color: var(--accent);">info@barishezer.av.tr</a></p>
+                            <p><a href="mailto:barishezer@gmail.com" style="font-weight: 600; color: var(--accent);">barishezer@gmail.com</a></p>
                         </div>
                     </div>
                     <div class="contact-item">

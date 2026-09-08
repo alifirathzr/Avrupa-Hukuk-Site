@@ -35,7 +35,7 @@ const headerHTML = (activePage) => `
 
 const whatsappAndBottomNav = (activePage) => `
     <!-- WhatsApp Floating Action Button -->
-    <a href="https://wa.me/905000000000" class="whatsapp-float" target="_blank" rel="noopener noreferrer" title="WhatsApp İletişim Hattı" aria-label="WhatsApp İletişim">
+    <a href="https://wa.me/905325588865" class="whatsapp-float" target="_blank" rel="noopener noreferrer" title="WhatsApp İletişim Hattı" aria-label="WhatsApp İletişim">
         <i class="fa-brands fa-whatsapp"></i>
         <span class="whatsapp-tooltip">WhatsApp Danışma Hattı</span>
     </a>

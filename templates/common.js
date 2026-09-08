@@ -41,7 +41,7 @@ const headerCommon = (activePage) => `
 
 const floatingAndNav = (activePage) => `
     <!-- WhatsApp Floating Butonu (Sol Alt / Bottom-Left) -->
-    <a href="https://wa.me/905000000000" class="whatsapp-float" target="_blank" rel="noopener noreferrer" title="WhatsApp İletişim Hattı" aria-label="WhatsApp İletişim Hattı">
+    <a href="https://wa.me/905325588865" class="whatsapp-float" target="_blank" rel="noopener noreferrer" title="WhatsApp İletişim Hattı" aria-label="WhatsApp İletişim Hattı">
         <i class="fa-brands fa-whatsapp"></i>
         <span class="whatsapp-tooltip">WhatsApp Danışma Hattı</span>
     </a>

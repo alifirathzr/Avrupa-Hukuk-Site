@@ -3,15 +3,15 @@ const path = require('path');
 const baseDir = __dirname;
 const files = ['index.html', 'hakkimda.html', 'uzmanlik-alanlari.html', 'makaleler.html', 'iletisim.html', 'kvkk.html'];
 
-const whatsapp = '\n<a href="https://wa.me/905000000000" class="whatsapp-float" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>\n';
+const whatsapp = '\n<a href="https://wa.me/905325588865" class="whatsapp-float" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>\n';
 const bnav = '\n<nav class="mobile-bottom-nav"><a href="index.html"><i class="fa-solid fa-house"></i><span>Ana Sayfa</span></a><a href="uzmanlik-alanlari.html"><i class="fa-solid fa-gavel"></i><span>Alanlar</span></a><a href="iletisim.html"><i class="fa-solid fa-envelope"></i><span>İletişim</span></a></nav>\n';
 
 files.forEach(f => {
     if(!fs.existsSync(f)) return;
     let c = fs.readFileSync(f, 'utf8');
     // Clean
-    c = c.replace(/<a href=" https:\/\/wa\.me\/905000000000\\ class=\\whatsapp-float\\ target=\\_blank\\>.*?<\/a>/g, '');
-    c = c.replace(/<a href="https:\/\/wa\.me\/905000000000".*?<\/a>/g, '');
+    c = c.replace(/<a href=" https:\/\/wa\.me\/905325588865\\ class=\\whatsapp-float\\ target=\\_blank\\>.*?<\/a>/g, '');
+    c = c.replace(/<a href="https:\/\/wa\.me\/905325588865".*?<\/a>/g, '');
     // Insert
     if(c.includes('</body>')) c = c.replace('</body>', whatsapp + bnav + '</body>');
     // Logo

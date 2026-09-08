@@ -77,14 +77,58 @@
             color: var(--primary);
         }
 
-        /* Other forms layout */
-        #catForm, #faqForm {
+        /* Category Form Layout */
+        #catForm {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.25rem;
+            align-items: center;
+        }
+        #catForm input#cName { grid-column: 1 / 2; }
+        #catForm input#cDesc { grid-column: 2 / 3; }
+        #catForm .file-upload-wrapper {
+            grid-column: 1 / -1;
+            background: #f8fafc;
+            padding: 0.85rem 1rem;
+            border-radius: 8px;
+            border: 1px dashed var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            transition: var(--transition);
+        }
+        #catForm .file-upload-wrapper:hover {
+            border-color: var(--accent);
+            background: #fdfbf7;
+        }
+        #catForm input#cImg { grid-column: 1 / -1; }
+        #catForm button[type="submit"] {
+            grid-column: 1 / -1;
+            background: var(--primary);
+            color: var(--white);
+            padding: 1rem;
+            font-size: 1rem;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+            box-shadow: 0 4px 12px rgba(13,27,42,0.15);
+        }
+        #catForm button[type="submit"]:hover {
+            background: var(--accent);
+            color: var(--primary);
+        }
+
+        /* FAQ Form layout */
+        #faqForm {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)) auto;
             gap: 1rem;
             align-items: center;
         }
-        #catForm button, #faqForm button {
+        #faqForm button {
             height: 100%;
         }
 
@@ -238,9 +282,13 @@
         <div class="card">
             <h2>Kategori Yönetimi</h2>
             <form id="catForm">
-                <input type="text" id="cName" placeholder="Kategori Adı" required>
-                <input type="text" id="cDesc" placeholder="Açıklama">
-                <input type="text" id="cImg" placeholder="Görsel URL">
+                <input type="text" id="cName" placeholder="Kategori Adı (Örn: Ceza Hukuku)" required>
+                <input type="text" id="cDesc" placeholder="Kısa Açıklama">
+                <div class="file-upload-wrapper">
+                    <label for="cFile" style="font-size: 0.9rem; font-weight: 500; color: var(--text-dark); cursor: pointer; display: flex; align-items: center; gap: 0.5rem;"><i class="fa-solid fa-cloud-arrow-up" style="color: var(--accent);"></i> Logo Dosyası Yükle (Bilgisayardan):</label>
+                    <input type="file" id="cFile" accept="image/*" style="font-size: 0.85rem; border: none; background: transparent; padding: 0;">
+                </div>
+                <input type="text" id="cImg" placeholder="Veya Harici Görsel / Logo URL (https://...)">
                 <button type="submit">Kategori Ekle</button>
             </form>
             <table class="admin-table">
@@ -442,20 +490,39 @@
 
         document.getElementById('catForm').onsubmit = (e) => {
             e.preventDefault();
+            const name = document.getElementById('cName').value;
+            const description = document.getElementById('cDesc').value;
+            const urlInput = document.getElementById('cImg').value;
+            const fileInput = document.getElementById('cFile').files[0];
+
+            if (fileInput) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const image_url = event.target.result;
+                    sendCategory(name, description, image_url);
+                };
+                reader.readAsDataURL(fileInput);
+            } else {
+                sendCategory(name, description, urlInput);
+            }
+        };
+
+        function sendCategory(name, description, image_url) {
             fetch('/api/categories', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({
-                name: document.getElementById('cName').value,
-                description: document.getElementById('cDesc').value,
-                image_url: document.getElementById('cImg').value
+                name, description, image_url
             }) }).then(res => {
                 if (res.ok) {
-                    document.getElementById('catForm').reset();
+                    document.getElementById('cName').value = '';
+                    document.getElementById('cDesc').value = '';
+                    document.getElementById('cImg').value = '';
+                    document.getElementById('cFile').value = '';
                     loadCategories();
                     showToast('Kategori başarıyla eklendi!');
                 } else {
                     showToast('Kategori eklenemedi.', 'error');
                 }
             });
-        };
+        }
 
         function loadFAQs() {
             fetch('/api/faqs').then(res => res.json()).then(data => {

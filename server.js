@@ -50,8 +50,8 @@ app.delete('/api/categories/:id', (req, res) => {
 });
 
 app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
 app.use(express.static(path.join(__dirname, '.')));
 
@@ -59,6 +59,7 @@ app.use(express.static(path.join(__dirname, '.')));
 db.serialize(() => {
     db.run("CREATE TABLE IF NOT EXISTS messages (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, email TEXT, phone TEXT, subject TEXT, message TEXT, is_read INTEGER DEFAULT 0, date DATETIME DEFAULT CURRENT_TIMESTAMP)");
     db.run("CREATE TABLE IF NOT EXISTS categories (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, description TEXT, image_url TEXT)", () => {
+        db.run("UPDATE categories SET image_url = '' WHERE image_url LIKE '/assets/%'");
         db.get("SELECT COUNT(*) as count FROM categories", (err, row) => {
             if (!err && row && row.count === 0) {
                 const defaultCategories = [
@@ -68,7 +69,7 @@ db.serialize(() => {
                 ];
                 const stmt = db.prepare("INSERT INTO categories (name, description, image_url) VALUES (?, ?, ?)");
                 defaultCategories.forEach(name => {
-                    stmt.run(name, "", categoryImages[name] || "");
+                    stmt.run(name, "", "");
                 });
                 stmt.finalize();
             }
