@@ -381,8 +381,8 @@ app.delete('/api/faqs/:id', requireAdminAuth, (req, res) => {
     db.run("DELETE FROM faqs WHERE id = ?", [req.params.id], (err) => { res.json({ success: true }); });
 });
 
-app.get('/admin', (req, res) => {
-    res.sendFile(path.join(__dirname, 'admin.html'));
+app.get('/yonetim-panel-gizli-89234', (req, res) => {
+    res.sendFile(path.join(__dirname, 'templates', 'admin.html'));
 });
 
 app.get('/favicon.ico', (req, res) => {

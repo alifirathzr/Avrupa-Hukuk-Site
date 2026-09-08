@@ -421,14 +421,14 @@
             });
         }
 
-        function getAuthToken() { return localStorage.getItem('adminToken') || ''; }
+        function getAuthToken() { return sessionStorage.getItem('adminToken') || ''; }
         function authHeaders(h = {}) { return { 'Authorization': 'Bearer ' + getAuthToken(), ...h }; }
 
         async function authFetch(url, options = {}) {
             options.headers = authHeaders(options.headers || {});
             const res = await fetch(url, options);
             if (res.status === 401) {
-                localStorage.removeItem('adminToken');
+                sessionStorage.removeItem('adminToken');
                 showLogin();
                 showToast('Oturum süreniz doldu. Lütfen giriş yapın.', 'error');
                 throw new Error('Unauthorized');
@@ -447,7 +447,7 @@
         }
 
         function logoutAdmin() {
-            localStorage.removeItem('adminToken');
+            sessionStorage.removeItem('adminToken');
             showToast('Başarıyla çıkış yapıldı.');
             showLogin();
         }
@@ -464,7 +464,7 @@
                 });
                 const data = await res.json();
                 if (res.ok && data.success && data.token) {
-                    localStorage.setItem('adminToken', data.token);
+                    sessionStorage.setItem('adminToken', data.token);
                     document.getElementById('adminLoginForm').reset();
                     showDashboard();
                     showToast('Giriş başarılı!');
