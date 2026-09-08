@@ -197,6 +197,18 @@
             const container = document.getElementById('homeFeaturedArticles');
             if (!container) return;
 
+            const categoryIcons = {
+                "Ceza Hukuku": "fa-gavel",
+                "Tazminat Hukuku": "fa-scale-balanced",
+                "Gayrimenkul Hukuku": "fa-house-chimney",
+                "Medeni Hukuku": "fa-users",
+                "Borçlar Hukuku": "fa-file-contract",
+                "İdare ve Vergi Hukuku": "fa-building-columns",
+                "AİHM ve Anayasa Mahkemesi'ne Bireysel Başvuru": "fa-landmark",
+                "Arabuluculuk": "fa-handshake",
+                "Mevzuat ve Yargıtay Kararları": "fa-book"
+            };
+
             try {
                 const res = await fetch('/api/articles');
                 if (!res.ok) throw new Error('Makaleler alınamadı');
@@ -219,11 +231,15 @@
                             formattedDate = art.date;
                         }
                     }
+                    const iconClass = categoryIcons[art.category] || 'fa-book-open';
                     return `
                         <a href="makale-detay.html?id=${art.id}" class="card article-card" style="text-decoration: none; display: flex; flex-direction: column; justify-content: space-between;">
                             <div>
-                                <div class="card-icon"><i class="fa-solid fa-book-bookmark"></i></div>
-                                ${formattedDate ? `<span style="font-size: 0.85rem; color: var(--accent); font-weight: 600; margin-bottom: 0.5rem; display: inline-block;">${formattedDate}</span>` : ''}
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+                                    <span style="font-size: 0.9rem; font-weight: 600; color: var(--accent); background: rgba(197, 160, 89, 0.1); padding: 0.35rem 0.75rem; border-radius: 6px; border: 1px solid rgba(197, 160, 89, 0.2);">${art.category || 'Genel'}</span>
+                                    <div class="card-icon" style="margin-bottom: 0; font-size: 2rem;"><i class="fa-solid ${iconClass}"></i></div>
+                                </div>
+                                ${formattedDate ? `<div style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 0.75rem;"><i class="fa-solid fa-calendar-days"></i> ${formattedDate}</div>` : ''}
                                 <h3 class="article-title">${art.title}</h3>
                                 <p class="article-desc">${art.summary || ''}</p>
                             </div>
