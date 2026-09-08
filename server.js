@@ -15,6 +15,7 @@ app.use(helmet({
     directives: {
       defaultSrc: ["'self'"],
       scriptSrc: ["'self'", "https://cdnjs.cloudflare.com", "https://maps.googleapis.com", "https://*.googleapis.com", "'unsafe-inline'"],
+      scriptSrcAttr: ["'unsafe-inline'"],
       styleSrc: ["'self'", "https://cdnjs.cloudflare.com", "'unsafe-inline'"],
       fontSrc: ["'self'", "https://cdnjs.cloudflare.com"],
       imgSrc: ["'self'", "data:", "https://images.unsplash.com", "https://img.icons8.com", "https://maps.gstatic.com", "https://maps.googleapis.com", "https://*.google.com", "https://*.googleapis.com"],

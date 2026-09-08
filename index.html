@@ -100,28 +100,8 @@
                     <h2>Öne Çıkan Makaleler / Hukuki Yazılar</h2>
                     <div class="underline"></div>
                 </div>
-                <div class="grid-3">
-                    <div class="card article-card">
-                        <div class="card-icon"><i class="fa-solid fa-book-bookmark"></i></div>
-                        <span style="font-size: 0.85rem; color: var(--accent); font-weight: 600; margin-bottom: 0.5rem; display: inline-block;">12 Ekim 2026</span>
-                        <h3 class="article-title">Kira Uyuşmazlıklarında Dava Şartı Arabuluculuk Süreci</h3>
-                        <p class="article-desc">Kira artış oranları ve tahliye davalarında zorunlu arabuluculuk aşamaları, dikkat edilmesi gereken yasal süreler ve hak kayıplarının önlenmesi.</p>
-                        <a href="makaleler.html" class="card-link">Devamını Oku <i class="fa-solid fa-arrow-right"></i></a>
-                    </div>
-                    <div class="card article-card">
-                        <div class="card-icon"><i class="fa-solid fa-scale-balanced"></i></div>
-                        <span style="font-size: 0.85rem; color: var(--accent); font-weight: 600; margin-bottom: 0.5rem; display: inline-block;">05 Ekim 2026</span>
-                        <h3 class="article-title">İcra Takiplerinde Haksız İtiraz ve Tazminat Davaları</h3>
-                        <p class="article-desc">Borçlunun takibe karşı haksız yere itiraz etmesi durumunda alacaklının başvurabileceği hukuki yollar ve inkâr tazminatı şartları.</p>
-                        <a href="makaleler.html" class="card-link">Devamını Oku <i class="fa-solid fa-arrow-right"></i></a>
-                    </div>
-                    <div class="card article-card">
-                        <div class="card-icon"><i class="fa-solid fa-shield-halved"></i></div>
-                        <span style="font-size: 0.85rem; color: var(--accent); font-weight: 600; margin-bottom: 0.5rem; display: inline-block;">28 Eylül 2026</span>
-                        <h3 class="article-title">İş Hukukunda Kıdem ve İhbar Tazminatı Hesaplama Esasları</h3>
-                        <p class="article-desc">İş sözleşmesinin feshi durumunda işçinin hak ettiği kıdem ve ihbar tazminatlarının hesaplanmasında dikkate alınan unsurlar.</p>
-                        <a href="makaleler.html" class="card-link">Devamını Oku <i class="fa-solid fa-arrow-right"></i></a>
-                    </div>
+                <div class="grid-3" id="homeFeaturedArticles">
+                    <!-- Dinamik olarak admin panelinden öne çıkarılan makaleler yüklenecek -->
                 </div>
                 <div style="text-align: center; margin-top: 3rem;">
                     <a href="makaleler.html" class="btn-hero" style="background: var(--card-dark); color: var(--accent); border: 2px solid var(--accent);">
@@ -212,5 +192,50 @@
     </footer>
 
     <script src="assets/js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const container = document.getElementById('homeFeaturedArticles');
+            if (!container) return;
+
+            try {
+                const res = await fetch('/api/articles');
+                if (!res.ok) throw new Error('Makaleler alınamadı');
+                const articles = await res.json();
+                
+                // Panelde işaretlenenler (is_featured === 1)
+                const featured = articles.filter(a => Number(a.is_featured) === 1);
+
+                if (featured.length === 0) {
+                    container.innerHTML = '<p style="text-align: center; grid-column: 1 / -1; color: var(--text-muted); padding: 2rem;">Henüz admin panelinden öne çıkarılan makale bulunmuyor.</p>';
+                    return;
+                }
+
+                container.innerHTML = featured.map(art => {
+                    let formattedDate = '';
+                    if (art.date) {
+                        try {
+                            formattedDate = new Date(art.date).toLocaleDateString('tr-TR', { year: 'numeric', month: 'long', day: 'numeric' });
+                        } catch(e) {
+                            formattedDate = art.date;
+                        }
+                    }
+                    return `
+                        <a href="makale-detay.html?id=${art.id}" class="card article-card" style="text-decoration: none; display: flex; flex-direction: column; justify-content: space-between;">
+                            <div>
+                                <div class="card-icon"><i class="fa-solid fa-book-bookmark"></i></div>
+                                ${formattedDate ? `<span style="font-size: 0.85rem; color: var(--accent); font-weight: 600; margin-bottom: 0.5rem; display: inline-block;">${formattedDate}</span>` : ''}
+                                <h3 class="article-title">${art.title}</h3>
+                                <p class="article-desc">${art.summary || ''}</p>
+                            </div>
+                            <span class="card-link" style="margin-top: 1rem;">Devamını Oku <i class="fa-solid fa-arrow-right"></i></span>
+                        </a>
+                    `;
+                }).join('');
+            } catch (err) {
+                console.error('Öne çıkan makaleler yüklenirken hata:', err);
+                container.innerHTML = '<p style="text-align: center; grid-column: 1 / -1; color: var(--text-muted); padding: 2rem;">Öne çıkan makaleler yüklenemedi.</p>';
+            }
+        });
+    </script>
 </body>
 </html>
