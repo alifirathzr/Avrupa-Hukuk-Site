@@ -124,25 +124,39 @@
 
             const catContainer = document.getElementById('categories-container');
 
-            const categories = [
-                { name: "Ceza Hukuku", icon: "fa-gavel", desc: "Soruşturma ve kovuşturma süreçleri hakkında temel bilgiler." },
-                { name: "Tazminat Hukuku", icon: "fa-scale-balanced", desc: "Maddi ve manevi tazminat talepleri." },
-                { name: "Gayrimenkul Hukuku", icon: "fa-house-chimney", desc: "Tapu ve kira uyuşmazlıkları." },
-                { name: "Medeni Hukuk", icon: "fa-users", desc: "Aile hukuku, boşanma ve miras." },
-                { name: "Borçlar Hukuku", icon: "fa-file-contract", desc: "Sözleşmeler ve alacak takibi." },
-                { name: "İdare ve Vergi Hukuku", icon: "fa-building-columns", desc: "Kamu ve vergi ihtilafları." },
-                { name: "Bireysel Başvuru", icon: "fa-landmark", desc: "AYM ve AİHM başvuru süreçleri." },
-                { name: "Arabuluculuk", icon: "fa-handshake", desc: "Dava öncesi çözüm yöntemleri." },
-                { name: "Mevzuat", icon: "fa-book", desc: "Güncel yasal düzenlemeler." }
-            ];
+            try {
+                const res = await fetch('/api/categories');
+                const categories = await res.json();
+                if (Array.isArray(categories)) {
+                    const iconMap = {
+                        "Ceza Hukuku": "fa-gavel",
+                        "Tazminat Hukuku": "fa-scale-balanced",
+                        "Gayrimenkul Hukuku": "fa-house-chimney",
+                        "Medeni Hukuku": "fa-users",
+                        "Medeni Hukuk": "fa-users",
+                        "Borçlar Hukuku": "fa-file-contract",
+                        "İdare ve Vergi Hukuku": "fa-building-columns",
+                        "AİHM ve Anayasa Mahkemesi'ne Bireysel Başvuru": "fa-landmark",
+                        "Arabuluculuk": "fa-handshake",
+                        "Mevzuat": "fa-book",
+                        "Mevzuat ve Yargıtay Kararları": "fa-book"
+                    };
 
-            catContainer.innerHTML = categories.map(cat => `
-                <a href="makaleler-liste.html?kategori=${encodeURIComponent(cat.name)}" class="card category-card">
-                    <div class="card-icon"><i class="fa-solid ${cat.icon}"></i></div>
-                    <h3>${cat.name}</h3>
-                    <p>${cat.desc}</p>
-                </a>
-            `).join('');
+                    catContainer.innerHTML = categories.map(cat => {
+                        const icon = iconMap[cat.name] || "fa-scale-balanced";
+                        const desc = cat.description || "Hukuki analizler ve güncel makaleler.";
+                        return `
+                            <a href="makaleler-liste.html?kategori=${encodeURIComponent(cat.name)}" class="card category-card">
+                                <div class="card-icon"><i class="fa-solid ${icon}"></i></div>
+                                <h3>${cat.name}</h3>
+                                <p>${desc}</p>
+                            </a>
+                        `;
+                    }).join('');
+                }
+            } catch (e) {
+                console.error("Kategoriler yüklenemedi:", e);
+            }
 
         });
 

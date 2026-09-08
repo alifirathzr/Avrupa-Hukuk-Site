@@ -395,6 +395,15 @@
                 const data = await res.json();
                 const body = document.getElementById('catBody');
                 body.innerHTML = data.map(c => `<tr><td>${c.name}</td><td><button class="btn-del" onclick="deleteCategory(${c.id})">Sil</button></td></tr>`).join('');
+                
+                // Makale ekleme kısmındaki kategori seçme yeri ile kategori kısmını bağla
+                const articleCatSelect = document.getElementById('articleCategory');
+                if (articleCatSelect) {
+                    const currentVal = articleCatSelect.value;
+                    articleCatSelect.innerHTML = '<option value="" disabled selected>Kategori Seçiniz</option>' +
+                        data.map(c => `<option value="${c.name}">${c.name}</option>`).join('');
+                    if (currentVal) articleCatSelect.value = currentVal;
+                }
             } catch (e) {
                 console.error("Kategoriler yüklenemedi:", e);
             }
