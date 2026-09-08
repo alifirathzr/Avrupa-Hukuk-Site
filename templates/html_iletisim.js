@@ -74,6 +74,9 @@ module.exports = `<!DOCTYPE html>
             
             <div>
                 <h3>İletişim Formu</h3>
+                <div id="formSuccessAlert" style="display: none; background-color: rgba(40, 167, 69, 0.15); color: #28a745; border: 1px solid rgba(40, 167, 69, 0.3); padding: 1rem; border-radius: 6px; margin-top: 1rem; margin-bottom: 0.5rem; font-weight: 600; align-items: center; gap: 0.75rem;">
+                    <i class="fa-solid fa-circle-check" style="font-size: 1.2rem;"></i> <span>Mesajınız başarıyla gönderildi! En kısa sürede sizinle iletişime geçilecektir.</span>
+                </div>
                 <form id="contactForm" style="margin-top: 1.5rem;">
                     <div class="form-group">
                         <label for="name">Adınız Soyadınız *</label>

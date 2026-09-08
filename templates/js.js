@@ -50,6 +50,10 @@ module.exports = `document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             const name = document.getElementById('name').value.trim();
             const email = document.getElementById('email').value.trim();
+            const phoneEl = document.getElementById('phone');
+            const phone = phoneEl ? phoneEl.value.trim() : '';
+            const subjectEl = document.getElementById('subject');
+            const subject = subjectEl ? subjectEl.value.trim() : '';
             const message = document.getElementById('message').value.trim();
             const kvkkCheck = document.getElementById('kvkkCheck').checked;
 
@@ -58,12 +62,32 @@ module.exports = `document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
             if (!kvkkCheck) {
-                showToast('Lütfen KVKK Aydınlatma Metni\\'ni onaylayınız.', 'error');
+                showToast('Lütfen KVKK Aydınlatma Metni\'ni onaylayınız.', 'error');
                 return;
             }
 
-            showToast('Mesajınız başarıyla iletildi. En kısa sürede dönüş yapılacaktır.', 'success');
+            const successAlert = document.getElementById('formSuccessAlert');
+            if (successAlert) {
+                successAlert.style.display = 'flex';
+            }
+            showToast('Mesajınız başarıyla gönderildi! En kısa sürede sizinle iletişime geçilecektir.', 'success');
             contactForm.reset();
+
+            // Arka planda sunucuya gönder
+            fetch('/api/contact', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, email, phone, subject, message })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (!data.success && data.message) {
+                    console.warn('Sunucu mesaj kaydı uyarısı:', data.message);
+                }
+            })
+            .catch(err => {
+                console.log('Sunucu API çağrısı yerel/statik modda atlandı:', err);
+            });
         });
     }
 
