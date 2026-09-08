@@ -29,7 +29,7 @@ module.exports = `<!DOCTYPE html>
     </header>
     <main class="container">
         <div style="max-width: 850px; margin: 0 auto; background: var(--white); padding: 3rem; border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); border-top: 4px solid var(--accent);">
-            <a href="makaleler.html" class="card-link" style="margin-bottom: 2rem; display: inline-flex;"><i class="fa-solid fa-arrow-left"></i> Tüm Makalelere Dön</a>
+            <a href="makaleler.html" id="backBtn" class="card-link" style="margin-bottom: 2rem; display: inline-flex;"><i class="fa-solid fa-arrow-left"></i> Tüm Makalelere Dön</a>
             <article id="articleContent">
                 <div style="display: flex; gap: 1rem; align-items: center; color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">
                     <span><i class="fa-solid fa-calendar-days"></i> <span id="detayDate">10 Mart 2026</span></span>
@@ -55,20 +55,32 @@ module.exports = `<!DOCTYPE html>
             const titleEl = document.getElementById('detayTitle');
             const textEl = document.getElementById('detayText');
             const dateEl = document.getElementById('detayDate');
+            const backBtn = document.getElementById('backBtn');
+
+            function setBackCategory(category) {
+                if (backBtn && category) {
+                    backBtn.href = `makaleler-liste.html?kategori=${encodeURIComponent(category)}`;
+                    backBtn.innerHTML = `<i class="fa-solid fa-arrow-left"></i> ${category} Makalelerine Dön`;
+                }
+            }
+
             const db = {
                 'kira-tespit': {
                     title: 'Kira Tespit Davaları Esasları',
+                    category: 'Gayrimenkul Hukuku',
                     text: \`<p>Kira bedellerinin fahiş artması veya enflasyon karşısında değer kaybetmesi durumunda, taraflara kira tespit davası açma hakkı tanınmıştır.</p>
                     <p>TBK Madde 344 uyarınca, sözleşmenin kurulmasından itibaren 5 yıl geçmişse, yeni kira bedeli TÜFE oranları, emsal bedeller ve hakkaniyet oranları göz önünde bulundurularak belirlenir.</p>
                     <p>Mahkeme bilirkişi yardımıyla bölgedeki emsal kiralık taşınmazları inceler ve hakkaniyet indirimi uygulayarak nihai bedeli belirler.</p>\`
                 },
                 'icra-itiraz': {
                     title: 'İlamsız İcra Takibine İtiraz ve Yolları',
+                    category: 'Borçlar Hukuku',
                     text: \`<p>Elinizde mahkeme kararı olmadan başlatılan takiplere ilamsız icra takibi denir. Bu takiplere karşı yasal hakların kullanımı sıkı sürelere bağlıdır.</p>
                     <p>İİK çerçevesinde borçlu, ödeme emri tebliğ alındıktan sonra 7 gün içinde ilgili icra dairesine itiraz etmek zorundadır. Borca veya dairenin yetkisine yönelik yapılan bu itiraz ile takip durdurulur.</p>\`
                 },
                 'hakli-fesih': {
                     title: 'İş Sözleşmesinin Haklı Nedenle Feshi',
+                    category: 'İş Hukuku',
                     text: \`<p>4857 Sayılı İş Kanunu uyarınca hem işçiye hem de işverene sözleşmeyi süresinden önce derhal feshetme hakkı tanınmıştır.</p>
                     <p>İşçi, sigorta primlerinin eksik yatırılması, maaş ödenmemesi veya ahlaka aykırılık gerekçesiyle haklı fesih yapıp kıdem tazminatını alabilir.</p>
                     <p>Fesih hakkının durumun öğrenilmesinden itibaren 6 iş günü içinde kullanılması zorunludur.</p>\`
@@ -83,6 +95,9 @@ module.exports = `<!DOCTYPE html>
                 titleEl.textContent = db[id].title;
                 textEl.innerHTML = db[id].text;
                 document.title = db[id].title + " | Avukat Barış Hezer";
+                if (db[id].category) {
+                    setBackCategory(db[id].category);
+                }
             } else {
                 try {
                     const res = await fetch(\`/api/articles/\${id}\`);
@@ -95,6 +110,9 @@ module.exports = `<!DOCTYPE html>
                         if (dateEl) dateEl.textContent = formattedDate;
                     }
                     document.title = article.title + " | Avukat Barış Hezer";
+                    if (article.category) {
+                        setBackCategory(article.category);
+                    }
                 } catch (err) {
                     console.error(err);
                     titleEl.textContent = 'Makale Bulunamadı';
