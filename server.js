@@ -9,8 +9,12 @@ const path = require('path');
 const app = express();
 const db = new sqlite3.Database('./database.db');
 
-// CSP ayarlarını yapılandır
+// CSP ve Güvenlik başlıklarını yapılandır (Yerel IP testleri için HSTS, COOP, OAC kısıtlamaları kapatıldı)
 app.use(helmet({
+  crossOriginOpenerPolicy: false,
+  crossOriginEmbedderPolicy: false,
+  originAgentCluster: false,
+  hsts: false,
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],
@@ -18,7 +22,7 @@ app.use(helmet({
       scriptSrcAttr: ["'unsafe-inline'"],
       styleSrc: ["'self'", "https://cdnjs.cloudflare.com", "'unsafe-inline'"],
       fontSrc: ["'self'", "https://cdnjs.cloudflare.com"],
-      imgSrc: ["'self'", "data:", "https://images.unsplash.com", "https://img.icons8.com", "https://maps.gstatic.com", "https://maps.googleapis.com", "https://*.google.com", "https://*.googleapis.com"],
+      imgSrc: ["'self'", "data:", "https://images.unsplash.com", "https://img.icons8.com", "https://images.unsplash.com", "https://img.icons8.com", "https://maps.gstatic.com", "https://maps.googleapis.com", "https://*.google.com", "https://*.googleapis.com"],
       frameSrc: ["'self'", "https://maps.google.com", "https://www.google.com", "https://*.google.com"],
       connectSrc: ["'self'", "https://maps.googleapis.com", "https://*.googleapis.com"],
     },
@@ -76,6 +80,22 @@ db.serialize(() => {
         else console.log("is_featured sütunu başarıyla eklendi.");
     });
     db.run("CREATE TABLE IF NOT EXISTS faqs (id INTEGER PRIMARY KEY AUTOINCREMENT, question TEXT, answer TEXT)");
+    db.get("SELECT COUNT(*) as count FROM faqs", (err, row) => {
+        if (!err && row && row.count === 0) {
+            const defaultFaqs = [
+                ["Hukuki danışmanlık hizmeti almak ücretli midir?", "Evet. 1136 Sayılı Avukatlık Kanunu ve TBB Meslek Kuralları uyarınca avukatların ücretsiz danışmanlık vermesi yasaktır. Danışmanlık ve dava ücretleri, her yıl yayınlanan Avukatlık Asgari Ücret Tarifesi esas alınarak belirlenmektedir."],
+                ["Avukata vekaletname nasıl ve nereden verilir?", "Vekaletname, Türkiye'deki herhangi bir noterden, yurt dışında ise Türk Konsolosluklarından verilebilmektedir. Vekaletname çıkarılmadan önce avukatınızın belirteceği özel yetkilerin (örneğin sulh yetkisi, arabuluculuk yetkisi, feragat yetkisi vb.) vekaletnamede yer alması gerekmektedir."],
+                ["Dava süreci ne kadar sürer ve ne sıklıkla bilgilendirme yapılır?", "Dava süreçleri; ilgili mahkemenin iş yüküne, delillerin toplanma hızına, tebligat sürelerine ve uyuşmazlığın niteliğine göre değişmektedir. Ofisimiz, davanızdaki her önemli gelişmede sizi anlık olarak bilgilendirmektedir."],
+                ["Hukuki uyuşmazlıklarda arabuluculuk zorunlu mudur?", "İş uyuşmazlıkları, ticari davalar ve belirli kira uyuşmazlıklarında dava açmadan önce arabulucuya başvurulması yasal bir dava şartıdır. Arabuluculuk süreci anlaşmazlıkların mahkemeye taşınmadan hızlı ve ekonomik bir şekilde çözülmesini sağlar."],
+                ["Şirketler için sürekli avukatlık ve danışmanlık hizmeti neleri kapsar?", "Şirket danışmanlığı; sözleşmelerin hazırlanması ve incelenmesi, iş hukuku süreçlerinin yönetilmesi, alacak takipleri ve olası hukuki risklerin önceden tespit edilerek önlem alınmasını (koruyucu hukuk) kapsar."]
+            ];
+            const stmt = db.prepare("INSERT INTO faqs (question, answer) VALUES (?, ?)");
+            defaultFaqs.forEach(faq => {
+                stmt.run(faq[0], faq[1]);
+            });
+            stmt.finalize();
+        }
+    });
 });
 
 // Nodemailer yapılandırması

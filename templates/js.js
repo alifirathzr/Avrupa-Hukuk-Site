@@ -111,17 +111,43 @@ module.exports = `document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 5. Akordeon Yapısı (SSS - Sıkça Sorulan Sorular)
-    const accordionItems = document.querySelectorAll('.accordion-item');
-    if (accordionItems.length > 0) {
-        accordionItems.forEach(item => {
-            const header = item.querySelector('.accordion-header');
-            header.addEventListener('click', () => {
-                const isActive = item.classList.contains('active');
-                accordionItems.forEach(other => other.classList.remove('active'));
-                if (!isActive) item.classList.add('active');
-            });
-        });
+    // 5. Akordeon Yapısı (SSS - Sıkça Sorulan Sorular) ve Dinamik Yükleme
+    const accordionContainers = document.querySelectorAll('.accordion');
+    if (accordionContainers.length > 0) {
+        fetch('/api/faqs')
+            .then(res => res.json())
+            .then(faqs => {
+                if (Array.isArray(faqs) && faqs.length > 0) {
+                    accordionContainers.forEach(container => {
+                        container.innerHTML = faqs.map(f => \`
+                            <div class="accordion-item">
+                                <button class="accordion-header">
+                                    <span>\${f.question}</span>
+                                    <i class="fa-solid fa-chevron-down"></i>
+                                </button>
+                                <div class="accordion-content">
+                                    <p>\${f.answer}</p>
+                                </div>
+                            </div>
+                        \`).join('');
+                    });
+                }
+            })
+            .catch(err => console.log('SSS yüklenemedi:', err));
     }
+
+    // Akordeon Tıklama Olayı (Event Delegation)
+    document.addEventListener('click', (e) => {
+        const header = e.target.closest('.accordion-header');
+        if (!header) return;
+        const item = header.closest('.accordion-item');
+        if (!item) return;
+        const accordion = item.closest('.accordion');
+        if (!accordion) return;
+
+        const isActive = item.classList.contains('active');
+        accordion.querySelectorAll('.accordion-item').forEach(other => other.classList.remove('active'));
+        if (!isActive) item.classList.add('active');
+    });
 });
 `;
