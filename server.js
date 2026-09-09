@@ -4,14 +4,18 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
-const sqlite3 = require('sqlite3').verbose();
+const { createClient } = require('@libsql/client');
 const nodemailer = require('nodemailer');
 const path = require('path');
 const crypto = require('crypto');
 
 const app = express();
 app.set('trust proxy', 1);
-const db = new sqlite3.Database('./database.db');
+
+const db = createClient({
+  url: process.env.TURSO_DATABASE_URL || 'file:local.db',
+  authToken: process.env.TURSO_AUTH_TOKEN,
+});
 
 // CSP ve Güvenlik başlıklarını yapılandır
 app.use(helmet({
@@ -58,36 +62,40 @@ app.use((req, res, next) => {
 
 app.use(express.static(path.join(__dirname, '.')));
 
-// Tabloları oluştur
-db.serialize(() => {
-    db.run("CREATE TABLE IF NOT EXISTS messages (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, email TEXT, phone TEXT, subject TEXT, message TEXT, is_read INTEGER DEFAULT 0, date DATETIME DEFAULT CURRENT_TIMESTAMP)");
-    db.run("CREATE TABLE IF NOT EXISTS categories (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, description TEXT, image_url TEXT)", () => {
-        db.run("UPDATE categories SET image_url = '' WHERE image_url LIKE '/assets/%'");
-        db.get("SELECT COUNT(*) as count FROM categories", (err, row) => {
-            if (!err && row && row.count === 0) {
-                const defaultCategories = [
-                    "Ceza Hukuku", "Tazminat Hukuku", "Gayrimenkul Hukuku", 
-                    "Medeni Hukuku", "Borçlar Hukuku", "İdare ve Vergi Hukuku", 
-                    "AİHM ve Anayasa Mahkemesi'ne Bireysel Başvuru", "Arabuluculuk", "Mevzuat ve Yargıtay Kararları"
-                ];
-                const stmt = db.prepare("INSERT INTO categories (name, description, image_url) VALUES (?, ?, ?)");
-                defaultCategories.forEach(name => {
-                    stmt.run(name, "", "");
+// Tabloları ve başlangıç verilerini oluştur
+async function initDb() {
+    try {
+        await db.execute("CREATE TABLE IF NOT EXISTS messages (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, email TEXT, phone TEXT, subject TEXT, message TEXT, is_read INTEGER DEFAULT 0, date DATETIME DEFAULT CURRENT_TIMESTAMP)");
+        await db.execute("CREATE TABLE IF NOT EXISTS categories (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, description TEXT, image_url TEXT)");
+        
+        const catCountRes = await db.execute("SELECT COUNT(*) as count FROM categories");
+        const catCount = catCountRes.rows[0]?.count || 0;
+        if (catCount === 0) {
+            const defaultCategories = [
+                "Ceza Hukuku", "Tazminat Hukuku", "Gayrimenkul Hukuku", 
+                "Medeni Hukuku", "Borçlar Hukuku", "İdare ve Vergi Hukuku", 
+                "AİHM ve Anayasa Mahkemesi'ne Bireysel Başvuru", "Arabuluculuk", "Mevzuat ve Yargıtay Kararları"
+            ];
+            for (const name of defaultCategories) {
+                await db.execute({
+                    sql: "INSERT INTO categories (name, description, image_url) VALUES (?, ?, ?)",
+                    args: [name, "", ""]
                 });
-                stmt.finalize();
             }
-        });
-    });
-    db.run("CREATE TABLE IF NOT EXISTS articles (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, summary TEXT, content TEXT, category TEXT, image TEXT, is_featured INTEGER DEFAULT 0, date DATETIME DEFAULT CURRENT_TIMESTAMP)", () => {
-        db.run("UPDATE articles SET image = 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=800&q=80' WHERE image LIKE '/assets/%'");
-    });
-    db.run("ALTER TABLE articles ADD COLUMN is_featured INTEGER DEFAULT 0", (err) => {
-        if (err) console.log("Sütun zaten mevcut veya eklenemedi (normal olabilir):", err.message);
-        else console.log("is_featured sütunu başarıyla eklendi.");
-    });
-    db.run("CREATE TABLE IF NOT EXISTS faqs (id INTEGER PRIMARY KEY AUTOINCREMENT, question TEXT, answer TEXT)");
-    db.get("SELECT COUNT(*) as count FROM faqs", (err, row) => {
-        if (!err && row && row.count === 0) {
+        }
+
+        await db.execute("CREATE TABLE IF NOT EXISTS articles (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, summary TEXT, content TEXT, category TEXT, image TEXT, is_featured INTEGER DEFAULT 0, date DATETIME DEFAULT CURRENT_TIMESTAMP)");
+        
+        try {
+            await db.execute("ALTER TABLE articles ADD COLUMN is_featured INTEGER DEFAULT 0");
+        } catch (e) {
+            // Sütun zaten mevcut olabilir
+        }
+
+        await db.execute("CREATE TABLE IF NOT EXISTS faqs (id INTEGER PRIMARY KEY AUTOINCREMENT, question TEXT, answer TEXT)");
+        const faqCountRes = await db.execute("SELECT COUNT(*) as count FROM faqs");
+        const faqCount = faqCountRes.rows[0]?.count || 0;
+        if (faqCount === 0) {
             const defaultFaqs = [
                 ["Hukuki danışmanlık hizmeti almak ücretli midir?", "Evet. 1136 Sayılı Avukatlık Kanunu ve TBB Meslek Kuralları uyarınca avukatların ücretsiz danışmanlık vermesi yasaktır. Danışmanlık ve dava ücretleri, her yıl yayınlanan Avukatlık Asgari Ücret Tarifesi esas alınarak belirlenmektedir."],
                 ["Avukata vekaletname nasıl ve nereden verilir?", "Vekaletname, Türkiye'deki herhangi bir noterden, yurt dışında ise Türk Konsolosluklarından verilebilmektedir. Vekaletname çıkarılmadan önce avukatınızın belirteceği özel yetkilerin (örneğin sulh yetkisi, arabuluculuk yetkisi, feragat yetkisi vb.) vekaletnamede yer alması gerekmektedir."],
@@ -95,14 +103,20 @@ db.serialize(() => {
                 ["Hukuki uyuşmazlıklarda arabuluculuk zorunlu mudur?", "İş uyuşmazlıkları, ticari davalar ve belirli kira uyuşmazlıklarında dava açmadan önce arabulucuya başvurulması yasal bir dava şartıdır. Arabuluculuk süreci anlaşmazlıkların mahkemeye taşınmadan hızlı ve ekonomik bir şekilde çözülmesini sağlar."],
                 ["Şirketler için sürekli avukatlık ve danışmanlık hizmeti neleri kapsar?", "Şirket danışmanlığı; sözleşmelerin hazırlanması ve incelenmesi, iş hukuku süreçlerinin yönetilmesi, alacak takipleri ve olası hukuki risklerin önceden tespit edilerek önlem alınmasını (koruyucu hukuk) kapsar."]
             ];
-            const stmt = db.prepare("INSERT INTO faqs (question, answer) VALUES (?, ?)");
-            defaultFaqs.forEach(faq => {
-                stmt.run(faq[0], faq[1]);
-            });
-            stmt.finalize();
+            for (const [q, a] of defaultFaqs) {
+                await db.execute({
+                    sql: "INSERT INTO faqs (question, answer) VALUES (?, ?)",
+                    args: [q, a]
+                });
+            }
         }
-    });
-});
+        console.log("Turso veritabanı bağlantısı ve tablolar başarıyla hazır.");
+    } catch (err) {
+        console.error("Veritabanı başlatma hatası:", err);
+    }
+}
+
+initDb();
 
 // Nodemailer yapılandırması
 const transporter = nodemailer.createTransport({
@@ -199,57 +213,65 @@ const categoryImages = {
 
 // API Routes
 // === CATEGORY DELETE ENDPOINT (ÖNCELİKLİ) ===
-app.delete('/api/categories/:id', requireAdminAuth, (req, res) => {
-  const categoryId = req.params.id;
-  db.run("DELETE FROM categories WHERE id = ?", [categoryId], function(err) {
-    if (err) {
-      console.error("Kategori silinirken hata:", err);
-      return res.status(500).json({ error: "Veritabanı hatası: " + err.message });
-    }
-    if (this.changes > 0) {
+app.delete('/api/categories/:id', requireAdminAuth, async (req, res) => {
+  try {
+    const categoryId = req.params.id;
+    const rs = await db.execute({ sql: "DELETE FROM categories WHERE id = ?", args: [categoryId] });
+    if (rs.rowsAffected > 0) {
       return res.json({ success: true, message: "Kategori başarıyla silindi." });
     } else {
       return res.status(404).json({ error: "Silinecek kategori bulunamadı." });
     }
-  });
+  } catch (err) {
+    console.error("Kategori silinirken hata:", err);
+    return res.status(500).json({ error: "Veritabanı hatası: " + err.message });
+  }
 });
 
-app.get('/api/categories', (req, res) => {
-    db.all("SELECT * FROM categories", [], (err, rows) => {
-        if (err) return res.status(500).json({ error: err.message });
-        res.json(rows || []);
-    });
+app.get('/api/categories', async (req, res) => {
+    try {
+        const rs = await db.execute("SELECT * FROM categories");
+        res.json(rs.rows || []);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 });
 
-app.get('/api/categories/:id', (req, res) => {
-    db.get("SELECT * FROM categories WHERE id = ?", [req.params.id], (err, row) => {
-        if (err) return res.status(500).json({ error: err.message });
+app.get('/api/categories/:id', async (req, res) => {
+    try {
+        const rs = await db.execute({ sql: "SELECT * FROM categories WHERE id = ?", args: [req.params.id] });
+        const row = rs.rows[0];
         if (!row) return res.status(404).json({ error: "Kategori bulunamadı" });
         res.json(row);
-    });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 });
 
-app.post('/api/categories', requireAdminAuth, (req, res) => {
-    const { name, description, image_url } = req.body;
-    db.run("INSERT INTO categories (name, description, image_url) VALUES (?, ?, ?)", [name, description, image_url], function(err) {
-        if (err) return res.status(500).json({ error: err.message });
-        res.json({ success: true, id: this.lastID });
-    });
+app.post('/api/categories', requireAdminAuth, async (req, res) => {
+    try {
+        const { name, description, image_url } = req.body;
+        const rs = await db.execute({
+            sql: "INSERT INTO categories (name, description, image_url) VALUES (?, ?, ?)",
+            args: [name, description, image_url]
+        });
+        res.json({ success: true, id: Number(rs.lastInsertRowid) });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 });
 
 // Admin Mesajlar Endpoint'i (Korumalı)
-app.get('/api/admin/messages', requireAdminAuth, (req, res) => {
+app.get('/api/admin/messages', requireAdminAuth, async (req, res) => {
   try {
-    db.all('SELECT * FROM messages ORDER BY id DESC', [], (err, rows) => {
-      if (err) throw err;
-      res.json(rows || []);
-    });
+    const rs = await db.execute('SELECT * FROM messages ORDER BY id DESC');
+    res.json(rs.rows || []);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-app.post('/api/contact', contactLimiter, (req, res) => {
+app.post('/api/contact', contactLimiter, async (req, res) => {
     const name = sanitize(req.body.name);
     const email = sanitize(req.body.email);
     const phone = sanitize(req.body.phone);
@@ -265,67 +287,84 @@ app.post('/api/contact', contactLimiter, (req, res) => {
         return res.status(400).json({ success: false, message: "Geçerli bir e-posta adresi giriniz." });
     }
 
-    db.run("INSERT INTO messages (name, email, phone, subject, message) VALUES (?, ?, ?, ?, ?)", [name, email, phone, subject, message], function(err) {
-        if (err) return res.status(500).json({ success: false, message: "Veritabanı hatası" });
-        try {
-            if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
-                transporter.sendMail({
-                    from: `"Av. Barış Hezer" <${process.env.EMAIL_USER}>`,
-                    to: process.env.EMAIL_USER,
-                    subject: 'Yeni İletişim Formu: ' + (subject || 'Genel'),
-                    html: `
-                        <h2>Yeni İletişim Mesajı</h2>
-                        <p><strong>İsim:</strong> ${name}</p>
-                        <p><strong>E-posta:</strong> ${email}</p>
-                        <p><strong>Telefon:</strong> ${phone || '-'}</p>
-                        <p><strong>Konu:</strong> ${subject || '-'}</p>
-                        <p><strong>Mesaj:</strong><br>${message.replace(/\n/g, '<br>')}</p>
-                    `
-                }, (mailErr) => {
-                    if (mailErr) console.error('mailErr:', mailErr.message);
-                });
-            }
-        } catch (e) {
-            console.error('Mail servisi hatası:', e.message);
+    try {
+        await db.execute({
+            sql: "INSERT INTO messages (name, email, phone, subject, message) VALUES (?, ?, ?, ?, ?)",
+            args: [name, email, phone, subject, message]
+        });
+
+        if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
+            transporter.sendMail({
+                from: `"Av. Barış Hezer" <${process.env.EMAIL_USER}>`,
+                to: process.env.EMAIL_USER,
+                subject: 'Yeni İletişim Formu: ' + (subject || 'Genel'),
+                html: `
+                    <h2>Yeni İletişim Mesajı</h2>
+                    <p><strong>İsim:</strong> ${name}</p>
+                    <p><strong>E-posta:</strong> ${email}</p>
+                    <p><strong>Telefon:</strong> ${phone || '-'}</p>
+                    <p><strong>Konu:</strong> ${subject || '-'}</p>
+                    <p><strong>Mesaj:</strong><br>${message.replace(/\n/g, '<br>')}</p>
+                `
+            }).catch(mailErr => console.error('mailErr:', mailErr.message));
         }
+
         res.status(200).json({ success: true, message: "Mesajınız başarıyla iletildi." });
-    });
+    } catch (err) {
+        console.error('İletişim formu hatası:', err);
+        res.status(500).json({ success: false, message: "Veritabanı hatası" });
+    }
 });
 
-app.delete('/api/admin/messages/:id', requireAdminAuth, (req, res) => {
-    db.run("DELETE FROM messages WHERE id = ?", [req.params.id], (err) => {
-        if (err) return res.status(500).json({ error: err.message });
+app.delete('/api/admin/messages/:id', requireAdminAuth, async (req, res) => {
+    try {
+        await db.execute({ sql: "DELETE FROM messages WHERE id = ?", args: [req.params.id] });
         res.json({ success: true });
-    });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 });
 
-app.put('/api/admin/messages/:id/read', requireAdminAuth, (req, res) => {
-    db.run("UPDATE messages SET is_read = 1 WHERE id = ?", [req.params.id], (err) => {
-        if (err) return res.status(500).json({ error: err.message });
+app.put('/api/admin/messages/:id/read', requireAdminAuth, async (req, res) => {
+    try {
+        await db.execute({ sql: "UPDATE messages SET is_read = 1 WHERE id = ?", args: [req.params.id] });
         res.json({ success: true });
-    });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 });
 
-app.get('/api/articles', (req, res) => {
-    db.all("SELECT * FROM articles", [], (err, rows) => { res.json(rows || []); });
+app.get('/api/articles', async (req, res) => {
+    try {
+        const rs = await db.execute("SELECT * FROM articles");
+        res.json(rs.rows || []);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 });
-app.get('/api/articles/:id', (req, res) => {
-    db.get("SELECT * FROM articles WHERE id = ?", [req.params.id], (err, row) => {
-        if (err || !row) return res.status(404).json({ error: "Makale bulunamadı" });
+
+app.get('/api/articles/:id', async (req, res) => {
+    try {
+        const rs = await db.execute({ sql: "SELECT * FROM articles WHERE id = ?", args: [req.params.id] });
+        const row = rs.rows[0];
+        if (!row) return res.status(404).json({ error: "Makale bulunamadı" });
         res.json(row);
-    });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 });
 
-
-app.put('/api/articles/:id/feature', requireAdminAuth, (req, res) => {
-    const { is_featured } = req.body;
-    db.run("UPDATE articles SET is_featured = ? WHERE id = ?", [is_featured, req.params.id], (err) => {
-        if (err) return res.status(500).json({ error: err.message });
+app.put('/api/articles/:id/feature', requireAdminAuth, async (req, res) => {
+    try {
+        const { is_featured } = req.body;
+        await db.execute({ sql: "UPDATE articles SET is_featured = ? WHERE id = ?", args: [is_featured, req.params.id] });
         res.json({ success: true });
-    });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 });
 
-app.post('/api/articles', requireAdminAuth, (req, res) => {
+app.post('/api/articles', requireAdminAuth, async (req, res) => {
   try {
     const { title, summary, content, category, image } = req.body;
 
@@ -338,28 +377,38 @@ app.post('/api/articles', requireAdminAuth, (req, res) => {
     const articleCategory = category || 'Genel';
     const createdDate = new Date().toISOString();
 
-    db.run('INSERT INTO articles (title, summary, content, category, image, is_featured, date) VALUES (?, ?, ?, ?, ?, ?, ?)', 
-        [title, summary || '', content, articleCategory, defaultImage, req.body.is_featured || 0, createdDate], 
-        function(err) {
-            if (err) throw err;
-            return res.status(201).json({ 
-                success: true, 
-                message: 'Makale başarıyla eklendi.', 
-                id: this.lastID 
-            });
-        });
+    const rs = await db.execute({
+        sql: 'INSERT INTO articles (title, summary, content, category, image, is_featured, date) VALUES (?, ?, ?, ?, ?, ?, ?)',
+        args: [title, summary || '', content, articleCategory, defaultImage, req.body.is_featured || 0, createdDate]
+    });
+
+    return res.status(201).json({ 
+        success: true, 
+        message: 'Makale başarıyla eklendi.', 
+        id: Number(rs.lastInsertRowid) 
+    });
   } catch (err) {
     console.error('Makale ekleme SQL hatası:', err.message);
     return res.status(500).json({ error: 'Sunucu hatası: ' + err.message });
   }
 });
 
-app.delete('/api/articles/:id', requireAdminAuth, (req, res) => {
-    db.run("DELETE FROM articles WHERE id = ?", [req.params.id], (err) => { res.json({ success: true }); });
+app.delete('/api/articles/:id', requireAdminAuth, async (req, res) => {
+    try {
+        await db.execute({ sql: "DELETE FROM articles WHERE id = ?", args: [req.params.id] });
+        res.json({ success: true });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 });
 
-app.get('/api/faqs', (req, res) => {
-    db.all("SELECT * FROM faqs", [], (err, rows) => { res.json(rows || []); });
+app.get('/api/faqs', async (req, res) => {
+    try {
+        const rs = await db.execute("SELECT * FROM faqs");
+        res.json(rs.rows || []);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 });
 
 const { headCommon, headerCommon, floatingAndNav, footerCommon } = require('./templates/common');
@@ -369,16 +418,26 @@ app.get('/makaleler-liste.html', (req, res) => {
     res.send(makalelerListeTemplate);
 });
 
-app.post('/api/faqs', requireAdminAuth, (req, res) => {
-    const { question, answer } = req.body;
-    db.run("INSERT INTO faqs (question, answer) VALUES (?, ?)", [question, answer], function(err) {
-        if (err) return res.status(500).json({ error: err.message });
-        res.json({ success: true, id: this.lastID });
-    });
+app.post('/api/faqs', requireAdminAuth, async (req, res) => {
+    try {
+        const { question, answer } = req.body;
+        const rs = await db.execute({
+            sql: "INSERT INTO faqs (question, answer) VALUES (?, ?)",
+            args: [question, answer]
+        });
+        res.json({ success: true, id: Number(rs.lastInsertRowid) });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 });
 
-app.delete('/api/faqs/:id', requireAdminAuth, (req, res) => {
-    db.run("DELETE FROM faqs WHERE id = ?", [req.params.id], (err) => { res.json({ success: true }); });
+app.delete('/api/faqs/:id', requireAdminAuth, async (req, res) => {
+    try {
+        await db.execute({ sql: "DELETE FROM faqs WHERE id = ?", args: [req.params.id] });
+        res.json({ success: true });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 });
 
 app.get('/yonetim-panel-gizli-89234', (req, res) => {
