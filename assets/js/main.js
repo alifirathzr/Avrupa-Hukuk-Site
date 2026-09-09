@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const message = document.getElementById('message').value.trim();
             const kvkkCheck = document.getElementById('kvkkCheck').checked;
 
-            if (!name || !email || !message) {
+            if (!name || !email || !phone || !message) {
                 showToast('Lütfen tüm zorunlu alanları doldurunuz.', 'error');
                 return;
             }

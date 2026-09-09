@@ -256,7 +256,7 @@ app.post('/api/contact', contactLimiter, (req, res) => {
     const subject = sanitize(req.body.subject);
     const message = sanitize(req.body.message);
 
-    if (!name || !email || !message) {
+    if (!name || !email || !phone || !message) {
         return res.status(400).json({ success: false, message: "Lütfen gerekli alanları doldurunuz." });
     }
 
