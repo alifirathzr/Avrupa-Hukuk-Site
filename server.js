@@ -60,7 +60,16 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use(express.static(path.join(__dirname, '.')));
+app.use((req, res, next) => {
+    if (req.path.endsWith('.html') && req.path !== '/404.html') {
+        return res.redirect(301, req.path.replace(/\.html$/, ''));
+    }
+    next();
+});
+
+app.use(express.static(path.join(__dirname, '.'), {
+    extensions: ['html']
+}));
 
 // Tabloları ve başlangıç verilerini oluştur
 async function initDb() {
